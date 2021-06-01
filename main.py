@@ -1,5 +1,5 @@
 import requests
-import BeautifulSoup4
+import BeautifulSoup
 
 print("Give URL to scrap with the protocol (http://...) \n")
 url = input()

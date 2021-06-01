@@ -1,5 +1,5 @@
 import requests
-import BeautifulSoup4
+import BeautifulSoup
 
 def get_pit(url):
 
