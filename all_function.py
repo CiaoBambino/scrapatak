@@ -17,7 +17,7 @@ def get_upc(url):
         soup = BeautifulSoup(result.text)
 
         trs = soup.findAll('tr')
-        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": o, "None": 0, "available": 0, "review": 0}
+        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": 0, "None": 0, "available": 0, "review": 0}
 
         j = 0
         for tr in trs:
@@ -51,7 +51,7 @@ def get_pit(url):
         soup = BeautifulSoup(result.text)
 
         trs = soup.findAll('tr')
-        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": o, "None": 0, "available": 0, "review": 0}
+        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": 0, "None": 0, "available": 0, "review": 0}
 
         j = 0
         for tr in trs:
@@ -73,7 +73,7 @@ def get_pet(url):
         soup = BeautifulSoup(result.text)
 
         trs = soup.findAll('tr')
-        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": o, "None": 0, "available": 0, "review": 0}
+        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": 0, "None": 0, "available": 0, "review": 0}
 
         j = 0
         for tr in trs:
@@ -95,7 +95,7 @@ def get_na(url):
         soup = BeautifulSoup(result.text)
 
         trs = soup.findAll('tr')
-        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": o, "None": 0, "available": 0, "review": 0}
+        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": 0, "None": 0, "available": 0, "review": 0}
 
         j = 0
         for tr in trs:
@@ -134,29 +134,6 @@ def get_cat(url):
         category.replace('HomeBooks', '')
         return category
 
-"""
-def scrap_for_cat(url):
-
-    url = 'http://books.toscrape.com/catalogue/category/books_1/index.html'
-    url_category = []
-    name_category = []
-    result = requests.get(url)
-    if result.status_code == 200:  # le resultat est vrai on continu (result.ok)
-        print(result)
-        soup = BeautifulSoup(result.text)
-        lis = soup.findALl('li')
-        for li in lis:
-            a = li.find('a')
-            b = a['href']
-            c = a.string
-            url_category.append(b)
-            name_category.append(c)
-            print(url_category)
-            print(name_category)
-
-            [{"category_name": "Action", "url": url.hmtl}] # #cete
-"""
-
 def get_rr(url):
     result = requests.get(url)
     review_rating = None
@@ -167,7 +144,7 @@ def get_rr(url):
         soup = BeautifulSoup(result.text)
 
         trs = soup.findAll('tr')
-        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": o, "None": 0, "available": 0, "review": 0}
+        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": 0, "None": 0, "available": 0, "review": 0}
 
         j = 0
         for tr in trs:
@@ -203,10 +180,13 @@ def get_img(url):
         with open(image_name, 'wb') as f:
         f.write(response.content)
 
-def csvmaker(product_page_url, universal_product_code, title, price_including_tax, price_excluding_tax, number_available, product_description, category, review_rating, image_url):
+def csvmaker(product_page_url, universal_product_code, title, price_including_tax, price_excluding_tax, \
+             number_available, product_description, category, review_rating, image_url):
 
     with open('page_info.csv', 'a', newline="") as f:
-    fieldnames = ['product_page_url', 'universal_product_code', 'title, price_including_tax', 'price_excluding_tax', 'number_available', 'product_description', 'category', 'review_rating', 'image_url']
+    fieldnames = ['product_page_url', 'universal_product_code', 'title, price_including_tax', 'price_excluding_tax', \
+                  'number_available', 'product_description', 'category', 'review_rating', 'image_url']
     csw_writer = csv.DictWriter(f, fieldnames=fieldnames)
     csw_writer.writeheader()
-    f.write(product_page_url, universal_product_code, title, price_including_tax, price_excluding_tax, number_available, product_description, category, review_rating, image_url)
+    f.write(product_page_url, universal_product_code, title, price_including_tax, price_excluding_tax, number_available\
+            , product_description, category, review_rating, image_url)
