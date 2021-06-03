@@ -1,16 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
-import get_ppu
-import get_upc
-import get_title
-import get_pit
-import get_pet
-import get_na
-import get_pd
-import get_cat
-import get_rr
-import get_iurl
+from all_function import *
 
 print("Give URL to scrap with the protocol (http://...) \n")
 url = input()
