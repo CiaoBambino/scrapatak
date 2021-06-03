@@ -1,6 +1,5 @@
 import requests
-import BeautifulSoup
-
+from bs4 import BeautifulSoup
 
 def get_iurl(url):
     result = requests.get(url)
