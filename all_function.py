@@ -2,12 +2,14 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
-def get_ppu(url):
-    product_page_url = url
-    return product_page_url
+"""
+THIS CONTAIN ALL THE FUNCTIONS TO SCRAP PAGES 
+"""
 
 def get_upc(url):
-
+    """
+    This function take the UPC and put it in a list in first place
+    """
     result = requests.get(url)
     universal_product_code = None
 
@@ -29,7 +31,9 @@ def get_upc(url):
     return universal_product_code
 
 def get_title(url):
-
+    """
+    This function take the title of the book
+    """
     result = requests.get(url)
     title = "unknow"
 
@@ -41,7 +45,9 @@ def get_title(url):
     return title
 
 def get_pit(url):
-
+    """
+    This function take the price including taxe and put it in a list in fourth place
+    """
     result = requests.get(url)
     price_including_tax = None
 
@@ -63,7 +69,9 @@ def get_pit(url):
     return price_including_tax
 
 def get_pet(url):
-
+    """
+    This function take the price excluding taxe and put it in a list in third place
+    """
     result = requests.get(url)
     price_excluding_tax = None
 
@@ -85,7 +93,9 @@ def get_pet(url):
     return price_excluding_tax
 
 def get_na(url):
-
+    """
+    This function take the number available of books and put it in a list in sixs place
+    """
     result = requests.get(url)
     number_available = None
 
@@ -107,17 +117,23 @@ def get_na(url):
     return number_available
 
 def get_pd(url):
+    """
+    This function take the product description and return it
+    """
     result = requests.get(url)
     product_description = "Empty"
     if result.status_code == 200:  # le resultat est vrai on continu (result.ok)
         print(result)
 
         soup = BeautifulSoup(result.text)
-        p = soup.find('p').get.text()     # peut etre un .string
+        p = soup.find('p').get_text()     # peut etre un .string
         product_description = p
     return product_description
 
 def get_cat(url):
+    """
+    This function take the categorie of the books on the product page and return it
+    """
     result = requests.get(url)
 
     if result.status_code == 200:  # le resultat est vrai on continu (result.ok)
@@ -135,6 +151,9 @@ def get_cat(url):
         return category
 
 def get_rr(url):
+    """
+    This function take the review rating number and put it in a list in seventh place and return it
+    """
     result = requests.get(url)
     review_rating = None
 
@@ -156,6 +175,9 @@ def get_rr(url):
     return review_rating
 
 def get_iurl(url):
+    """
+    This function take image link and return it
+    """
     result = requests.get(url)
     image_url = "unknow"
 
@@ -173,6 +195,9 @@ def get_iurl(url):
     return image_url
 
 def get_img(url):
+    """
+    This function download image with the title in name in the folders of the programme
+    """
     image_name = get_title(url)
     url = get_iurl(url)
     response = requests.get(url)
@@ -182,7 +207,9 @@ def get_img(url):
 
 def csvmaker(product_page_url, universal_product_code, title, price_including_tax, price_excluding_tax, \
              number_available, product_description, category, review_rating, image_url):
-
+    """
+    This function take all the resuslt of others fucntion and put it ine CSV file in the programme folder
+    """
     with open('page_info.csv', 'a', newline="") as f:
     fieldnames = ['product_page_url', 'universal_product_code', 'title, price_including_tax', 'price_excluding_tax', \
                   'number_available', 'product_description', 'category', 'review_rating', 'image_url']
