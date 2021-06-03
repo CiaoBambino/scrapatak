@@ -1,6 +1,16 @@
 import requests
 from bs4 import BeautifulSoup
-
+import csv
+import get_ppu
+import get_upc
+import get_title
+import get_pit
+import get_pet
+import get_na
+import get_pd
+import get_cat
+import get_rr
+import get_iurl
 
 print("Give URL to scrap with the protocol (http://...) \n")
 url = input()
@@ -16,5 +26,5 @@ category = get_cat(url)
 review_rating = get_rr(url)
 image_url = get_iurl(url)
 
-
+csvmaker(product_page_url, universal_product_code, title, price_including_tax, price_excluding_tax, number_available, product_description, category, review_rating, image_url)
 
