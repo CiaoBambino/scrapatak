@@ -2,8 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
-def get_ppu():
-    product_page_url = None
+def get_ppu(url):
+    product_page_url = url
+    return product_page_url
 
 def get_upc(url):
 
@@ -127,12 +128,13 @@ def get_cat(url):
         lis = soup.findALl('li')
         for li in lis:
             a = li.find('a')
-            b = a['href']
-            c += str(a.string)
-            category = c
+            c = a.string
+            category += c
             print(category)
         category.replace('HomeBooks', '')
+        return category
 
+"""
 def scrap_for_cat(url):
 
     url = 'http://books.toscrape.com/catalogue/category/books_1/index.html'
@@ -152,7 +154,8 @@ def scrap_for_cat(url):
             print(url_category)
             print(name_category)
 
-            [{"category_name": "Action", "url": url.hmtl}]
+            [{"category_name": "Action", "url": url.hmtl}] # #cete
+"""
 
 def get_rr(url):
     result = requests.get(url)
