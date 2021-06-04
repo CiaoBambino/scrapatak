@@ -17,10 +17,10 @@ if result.status_code == 200:  # result.ok
     print(result)
 
     soup = BeautifulSoup(result.text)
-    category = [{"category_name": "Books", "link": url.html}]
+    category = [{"category_name": "Books", "link": "url.html"}]
     i = 1
 
-    for ultag in soup.findAll('ul', {'class':, 'nav nav-list'}):    #on récupère les catégorie
+    for ultag in soup.findAll('ul', {'class': 'nav nav-list'}):    # on récupère les catégorie
 
         for litag in ultag.findAll('li'):
 
@@ -29,18 +29,18 @@ if result.status_code == 200:  # result.ok
             category_name = a.string
             link = a['href']
             links.append(link)
-            category[i].append{'category_name': category_name, 'link': link}
+            category[i].append({'category_name': category_name, 'link': link})
             i += 1
 
-            for link in links:      #pour chaque catégorie(lien)
+            for link in links:      # pour chaque catégorie(lien)
 
-                current_cat = requests.get(link) #on entre dans la catégorie
+                current_cat = requests.get(link)  # on entre dans la catégorie
 
                 if current_cat.status_code == 200:
 
-                    soupsale = BeautifulSoup(current_cat.text)          #on récupère les liens des livres
+                    soupsale = BeautifulSoup(current_cat.text)          # on récupère les liens des livres
 
-                    for li in soupsale.findALl('li', {'class':, 'col-xs-6 col-sm-4 col-md-3 col-lg-3'}):
+                    for li in soupsale.findALl('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'}):
 
                         b = li.find('a')
                         url = b['href']
@@ -55,7 +55,8 @@ if result.status_code == 200:  # result.ok
                         review_rating = get_rr(url)
                         image_url = get_iurl(url)
 
-                        csvmaker(product_page_url, universal_product_code, title, price_including_tax,\
-                        price_excluding_tax, number_available, product_description, category, review_rating, image_url)
+                        csvmaker(product_page_url, universal_product_code, title, price_including_tax,
+                                 price_excluding_tax, number_available, product_description,
+                                 category, review_rating, image_url)
 
-            #write cateogry in csv files
+            # write category in csv files
