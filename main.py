@@ -30,30 +30,39 @@ if result.status_code == 200:  # result.ok
             link = a['href']
             links.append(link)
             category[i].append({'category_name': category_name, 'link': link})
-            i += 1
+
 
             for link in links:      # pour chaque catégorie(lien)
 
-                current_cat = requests.get(link)  # on entre dans la catégorie
+                name = category[i]['category_name']
+                filename = "%s.csv" % name
+                with open(filename, 'w', newline="") as f:
+                    fieldnames = ['product_page_url', 'universal_product_code', 'title, price_including_tax',
+                                  'price_excluding_tax',
+                                  'number_available', 'product_description', 'category', 'review_rating', 'image_url']
+                    csw_writer = csv.DictWriter(f, fieldnames=fieldnames)
+                    csw_writer.writeheader()
 
-                if current_cat.status_code == 200:
+                    current_cat = requests.get(link)  # on entre dans la catégorie
 
-                    soupsale = BeautifulSoup(current_cat.text)          # on récupère les liens des livres
+                    if current_cat.status_code == 200:
 
-                    for li in soupsale.findALl('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'}):
+                        soupsale = BeautifulSoup(current_cat.text)          # on récupère les liens des livres
 
-                        b = li.find('a')
-                        url = b['href']
-                        scrap_target_page(url)
+                        for li in soupsale.findALl('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'}):
 
-                    if next_button(link) == True: # if next button so next page so scrap all of them
+                            b = li.find('a')
+                            url = b['href']
+                            scrap_target_page(url)
 
-                        _, next_page_link = next_button(link) # askip on peut faire comme ça aussi "function()[1]"
-                        scrap_target_page(next_page_link)
+                        if next_button(link) == True: # if next button so next page so scrap all of them
 
-                        while next_button(next_page_link) == True: # tant qu'il y a un bouton next
-
-                            _, next_page_link = next_button(next_page_link) # copy the link to the next page
+                            _, next_page_link = next_button(link) # on peut faire comme ça aussi "function()[1]"
                             scrap_target_page(next_page_link)
 
-            # write category in csv files
+                            while next_button(next_page_link) == True: # tant qu'il y a un bouton next
+
+                                _, next_page_link = next_button(next_page_link) # copy next page link
+                                scrap_target_page(next_page_link)
+
+            i += 1  # on incrémente pour passé à la case clef valeur suivante et parcourir le dictionnaire
