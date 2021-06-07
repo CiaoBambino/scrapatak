@@ -3,8 +3,31 @@ from bs4 import BeautifulSoup
 import csv
 
 """
-THIS CONTAIN ALL THE FUNCTIONS TO SCRAP PAGES 
+THIS CONTAIN ALL THE FUNCTIONS NECESSARY TO SCRAP PAGES 
 """
+
+
+def then_how_much_page():
+    fe
+
+def next_button(link):
+    """
+    This functions look for "Next" button that mean we have others pages to scrap and return true
+    if there is one and the link
+    """
+    soupsoja = BeautifulSoup(link.text)  # pas besoin de tester le lien déjà fait dans le main
+    childTag = soupsoja.find('li', {'class': 'next'})
+
+    if childTag:
+
+        a = childTag.find('a')
+        b = a['href']
+        result = requests.get(b)
+
+        if result.status_code == 200:
+
+            return True, b
+
 def scrap_current_page(url):
     """
     This function scrap the current page and return a CSV file

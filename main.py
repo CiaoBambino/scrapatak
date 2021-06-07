@@ -46,4 +46,8 @@ if result.status_code == 200:  # result.ok
                         url = b['href']
                         scrap_current_page(url)
 
+                        if next_button(link) == True:
+
+                            other_page_to_scrap = then_how_much_page()
+
             # write category in csv files
