@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
-from all_function import *
+from scrapatak_functions import * #chaque fonction ecrire
 
 """
 In the following order, Main function is testing the link of the website, taking all the categories links and names,
@@ -44,19 +44,6 @@ if result.status_code == 200:  # result.ok
 
                         b = li.find('a')
                         url = b['href']
-                        product_page_url = url
-                        universal_product_code = get_upc(url)
-                        title = get_title(url)
-                        price_including_tax = get_pit(url)
-                        price_excluding_tax = get_pet(url)
-                        number_available = get_na(url)
-                        product_description = get_pd(url)
-                        category = get_cat(url)
-                        review_rating = get_rr(url)
-                        image_url = get_iurl(url)
-
-                        csvmaker(product_page_url, universal_product_code, title, price_including_tax,
-                                 price_excluding_tax, number_available, product_description,
-                                 category, review_rating, image_url)
+                        scrap_current_page(url)
 
             # write category in csv files

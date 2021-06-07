@@ -5,8 +5,26 @@ import csv
 """
 THIS CONTAIN ALL THE FUNCTIONS TO SCRAP PAGES 
 """
+def scrap_current_page(url):
+    """
+    This function scrap the current page and return a CSV file
+    """
+    product_page_url = url
+    universal_product_code = get_universal_product_code(url)
+    title = get_title(url)
+    price_including_tax = get_price_including_taxe(url)
+    price_excluding_tax = get_price_excluding_taxe(url)
+    number_available = get_number_available(url)
+    product_description = get_product_description(url)
+    category = get_category(url)
+    review_rating = get_review_rating(url)
+    image_url = get_image_url(url)
+    get_img(image_url)
+    csvmaker(product_page_url, universal_product_code, title, price_including_tax,
+             price_excluding_tax, number_available, product_description,
+             category, review_rating, image_url)
 
-def get_upc(url):
+def get_universal_product_code(url):
     """
     This function take the UPC and put it in a list in first place
     """
@@ -44,7 +62,7 @@ def get_title(url):
         title = soup.find('h1').get_text()
     return title
 
-def get_pit(url):
+def get_price_including_taxe(url):
     """
     This function take the price including taxe and put it in a list in fourth place
     """
@@ -68,7 +86,7 @@ def get_pit(url):
         price_including_tax = argument[3]
     return price_including_tax
 
-def get_pet(url):
+def get_price_excluding_taxe(url):
     """
     This function take the price excluding taxe and put it in a list in third place
     """
@@ -92,7 +110,7 @@ def get_pet(url):
         price_excluding_tax = argument[2]
     return price_excluding_tax
 
-def get_na(url):
+def get_number_available(url):
     """
     This function take the number available of books and put it in a list in sixs place
     """
@@ -116,7 +134,7 @@ def get_na(url):
         number_available = argument[5]
     return number_available
 
-def get_pd(url):
+def get_product_description(url):
     """
     This function take the product description and return it
     """
@@ -130,7 +148,7 @@ def get_pd(url):
         product_description = p
     return product_description
 
-def get_cat(url):
+def get_category(url):
     """
     This function take the categorie of the books on the product page and return it
     """
@@ -150,7 +168,7 @@ def get_cat(url):
         category.replace('HomeBooks', '')
         return category
 
-def get_rr(url):
+def get_review_rating(url):
     """
     This function take the review rating number and put it in a list in seventh place and return it
     """
@@ -174,7 +192,7 @@ def get_rr(url):
         review_rating = argument[6]
     return review_rating
 
-def get_iurl(url):
+def get_image_url(url):
     """
     This function take image link and return it
     """
@@ -199,11 +217,11 @@ def get_img(url):
     This function download image with the title in name in the folders of the programme
     """
     image_name = get_title(url)
-    url = get_iurl(url)
-    response = requests.get(url)
+    link = get_image_url(url)
+    response = requests.get(link)
     if response.status_code == 200:
-        with open(image_name, 'wb') as f:
-        f.write(response.content)
+        with open(image_name + '.jpg', 'wb') as f:
+            f.write(response.content)
 
 def csvmaker(product_page_url, universal_product_code, title, price_including_tax, price_excluding_tax, \
              number_available, product_description, category, review_rating, image_url):
@@ -211,9 +229,9 @@ def csvmaker(product_page_url, universal_product_code, title, price_including_ta
     This function take all the resuslt of others fucntion and put it ine CSV file in the programme folder
     """
     with open('page_info.csv', 'a', newline="") as f:
-    fieldnames = ['product_page_url', 'universal_product_code', 'title, price_including_tax', 'price_excluding_tax', \
-                  'number_available', 'product_description', 'category', 'review_rating', 'image_url']
-    csw_writer = csv.DictWriter(f, fieldnames=fieldnames)
-    csw_writer.writeheader()
-    f.write(product_page_url, universal_product_code, title, price_including_tax, price_excluding_tax, number_available\
-            , product_description, category, review_rating, image_url)
+        fieldnames = ['product_page_url', 'universal_product_code', 'title, price_including_tax', 'price_excluding_tax', \
+                      'number_available', 'product_description', 'category', 'review_rating', 'image_url']
+        csw_writer = csv.DictWriter(f, fieldnames=fieldnames)
+        csw_writer.writeheader()
+        f.write(product_page_url, universal_product_code, title, price_including_tax, price_excluding_tax, number_available\
+                , product_description, category, review_rating, image_url)
