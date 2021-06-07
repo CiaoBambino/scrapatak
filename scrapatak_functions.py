@@ -6,14 +6,11 @@ import csv
 THIS CONTAIN ALL THE FUNCTIONS NECESSARY TO SCRAP PAGES 
 """
 
-
-def then_how_much_page():
-    fe
-
 def next_button(link):
     """
-    This functions look for "Next" button that mean we have others pages to scrap and return true
-    if there is one and the link
+    This functions is doing 2 things :
+    - First look for "Next" button that mean we have others pages to scrap and return true if its the case
+    - Second get the link of the next page and return it
     """
     soupsoja = BeautifulSoup(link.text)  # pas besoin de tester le lien déjà fait dans le main
     childTag = soupsoja.find('li', {'class': 'next'})
@@ -21,12 +18,12 @@ def next_button(link):
     if childTag:
 
         a = childTag.find('a')
-        b = a['href']
+        next_page = a['href']
         result = requests.get(b)
 
         if result.status_code == 200:
 
-            return True, b
+            return True, next_page
 
 def scrap_current_page(url):
     """

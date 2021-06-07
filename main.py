@@ -48,6 +48,13 @@ if result.status_code == 200:  # result.ok
 
                         if next_button(link) == True:
 
-                            other_page_to_scrap = then_how_much_page()
+                            j = 1   # compteur de page
+                            _, next_page_link = next_button(link) # askip on peut faire comme ça aussi "function()[1]"
+
+                            while next_button(next_page_link) == True: # tant qu'il y a un bouton next
+
+                                j += 1
+                                _, next_page_link = next_button(next_page_link) # copy the link to the next page
+                                return j
 
             # write category in csv files
