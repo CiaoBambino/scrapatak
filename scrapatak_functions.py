@@ -62,7 +62,7 @@ def get_universal_product_code(url):
         soup = BeautifulSoup(result.text)
 
         trs = soup.findAll('tr')
-        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": 0, "None": 0, "available": 0, "review": 0}
+        argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
 
         j = 0
         for tr in trs:
@@ -100,7 +100,7 @@ def get_price_including_taxe(url):
         soup = BeautifulSoup(result.text)
 
         trs = soup.findAll('tr')
-        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": 0, "None": 0, "available": 0, "review": 0}
+        argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
 
         j = 0
         for tr in trs:
@@ -124,7 +124,7 @@ def get_price_excluding_taxe(url):
         soup = BeautifulSoup(result.text)
 
         trs = soup.findAll('tr')
-        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": 0, "None": 0, "available": 0, "review": 0}
+        argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
 
         j = 0
         for tr in trs:
@@ -148,7 +148,7 @@ def get_number_available(url):
         soup = BeautifulSoup(result.text)
 
         trs = soup.findAll('tr')
-        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": 0, "None": 0, "available": 0, "review": 0}
+        argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
 
         j = 0
         for tr in trs:
@@ -206,7 +206,7 @@ def get_review_rating(url):
         soup = BeautifulSoup(result.text)
 
         trs = soup.findAll('tr')
-        argument = {"upc": 0, "None": 0, "pricee": 0, "pricei": 0, "None": 0, "available": 0, "review": 0}
+        argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
 
         j = 0
         for tr in trs:
