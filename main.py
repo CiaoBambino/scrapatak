@@ -44,17 +44,16 @@ if result.status_code == 200:  # result.ok
 
                         b = li.find('a')
                         url = b['href']
-                        scrap_current_page(url)
+                        scrap_target_page(url)
 
-                        if next_button(link) == True:
+                    if next_button(link) == True: # if next button so next page so scrap all of them
 
-                            j = 1   # compteur de page
-                            _, next_page_link = next_button(link) # askip on peut faire comme ça aussi "function()[1]"
+                        _, next_page_link = next_button(link) # askip on peut faire comme ça aussi "function()[1]"
+                        scrap_target_page(next_page_link)
 
-                            while next_button(next_page_link) == True: # tant qu'il y a un bouton next
+                        while next_button(next_page_link) == True: # tant qu'il y a un bouton next
 
-                                j += 1
-                                _, next_page_link = next_button(next_page_link) # copy the link to the next page
-                                return j
+                            _, next_page_link = next_button(next_page_link) # copy the link to the next page
+                            scrap_target_page(next_page_link)
 
             # write category in csv files

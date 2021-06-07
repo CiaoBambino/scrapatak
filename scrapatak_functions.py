@@ -19,13 +19,17 @@ def next_button(link):
 
         a = childTag.find('a')
         next_page = a['href']
-        result = requests.get(b)
+        result = requests.get(next_page)
 
         if result.status_code == 200:
 
             return True, next_page
 
-def scrap_current_page(url):
+    else:
+
+        return False
+
+def scrap_target_page(url):
     """
     This function scrap the current page and return a CSV file
     """
