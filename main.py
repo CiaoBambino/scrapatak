@@ -36,21 +36,20 @@ if result.status_code == 200:  # result.ok
             links.append(link)
             category[i].append({'category_name': category_name, 'link': link})
 
-
             for link in links:      # pour chaque catégorie(lien)
 
-                name = category[i]['category_name']                           # names
+                name = category[i]['category_name']    # names
                 filename = "%s.csv" % name
                 directory_name = "%s" % name
                 img_directory_name = "IMG_%s" % name
-                                                                              # directory path
-                parent_dir = os.getcwd()
+
+                parent_dir = os.getcwd()    # directory path
                 img_parent_dir = os.getcwd()
-                                                                              # path = directory path + names
-                path = os.path.join(parent_dir, directory_name)
+
+                path = os.path.join(parent_dir, directory_name)    # path = directory path + names
                 img_path = os.path.join(img_parent_dir, img_directory_name)
-                                                                              # create folder
-                os.mkdir(path)
+
+                os.mkdir(path)    # create folder
                 os.mkdir(img_path)
 
                 with open(os.path.join(path, filename), 'w', newline="") as f:
@@ -72,14 +71,14 @@ if result.status_code == 200:  # result.ok
                             url = b['href']
                             scrap_target_page(url)
 
-                        if next_button(link) == True: # if next button so next page so scrap all of them
+                        if next_button(link) is True:  # if next button so next page so scrap all of them
 
-                            _, next_page_link = next_button(link) # on peut faire comme ça aussi "function()[1]"
+                            _, next_page_link = next_button(link)  # on peut faire comme ça aussi "function()[1]"
                             scrap_target_page(next_page_link)
 
-                            while next_button(next_page_link) == True: # tant qu'il y a un bouton next
+                            while next_button(next_page_link) is True:  # tant qu'il y a un bouton next
 
-                                _, next_page_link = next_button(next_page_link) # copy next page link
+                                _, next_page_link = next_button(next_page_link)  # copy next page link
                                 scrap_target_page(next_page_link)
 
             i += 1  # on incrémente pour passé à la case clef valeur suivante et parcourir le dictionnaire
