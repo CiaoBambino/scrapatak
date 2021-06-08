@@ -56,7 +56,7 @@ def scrap_target_page(url):
     with open(filename, 'a', newline="") as f:     # en mode ajout 'a' pour écrire à la suite
         csv_writer = csv.writer(f)
         csv_writer.writerow(product_page_url, universal_product_code, title, price_including_taxe, price_excluding_taxe,
-                number_available, product_description, category, review_rating, image_url)
+                            number_available, product_description, category, review_rating, image_url)
 
     sleep(randint(3, 7))
 
