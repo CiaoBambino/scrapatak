@@ -54,10 +54,10 @@ def scrap_target_page(url):
     get_img(image_url)
 
     with open(filename, 'a', newline="") as f:     # en mode ajout 'a' pour écrire à la suite
-        csv_writing = csv.writer(f)
-        csv_writing.write(product_page_url + universal_product_code + title + price_including_taxe +
-                          price_excluding_taxe + number_available + product_description + category + review_rating +
-                          image_url)
+
+        f.write(product_page_url + universal_product_code + title + price_including_taxe +
+                price_excluding_taxe + number_available + product_description + category + review_rating +
+                image_url)
 
     sleep(randint(3, 7))
 
@@ -199,12 +199,12 @@ def get_category(url):
         soup = BeautifulSoup(result.text, 'lxml')
         category = "Unknow"
         lis = soup.findALl('li')
+
         for li in lis:
-            a = li.find('a')
-            c = a.string
-            category += c
-            print(category)
-        category.replace('HomeBooks', '')
+            a = li.find('a')    # précedente version c = a.string, category += c
+            category += str(a)
+
+        category.replace('UnknowHomeBooks', '')
         return category
 
 
