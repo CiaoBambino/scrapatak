@@ -1,12 +1,19 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
-from scrapatak_functions import * #chaque fonction ecrire
+from scrapatak_functions import *
+"""
+from scrapatak_functions import
+next_button, scrap_target_page, get_universal_product_code, get_title, get_price_including_taxe, 
+get_price_excluding_taxe, get_number_available, get_product_description, get_category, get_review_rating,
+get_image_url, get_img, csv_writer
+"""
+import os
 
 """
 In the following order, Main function is testing the link of the website, taking all the categories links and names,
-for each categories links testing them, go inside, take html, find books links and finally scrap each books one bye
-one and read into CSV files
+for each categories links create a csv file, find books links, scrap each books one bye one and write it into CSV 
+files and finally look for "next button" and go scrap other page if there is
 """
 
 cible = 'http://books.toscrape.com/index.html'
@@ -34,9 +41,21 @@ if result.status_code == 200:  # result.ok
 
             for link in links:      # pour chaque catégorie(lien)
 
-                name = category[i]['category_name']
+                name = category[i]['category_name']                           # names
                 filename = "%s.csv" % name
-                with open(filename, 'w', newline="") as f:
+                directory_name = "%s" % name
+                img_directory_name = "IMG_%s" % name
+                                                                              # directory path
+                parent_dir = os.getcwd()
+                img_parent_dir = os.getcwd()
+                                                                              # path = directory path + names
+                path = os.path.join(parent_dir, directory_name)
+                img_path = os.path.join(img_parent_dir, img_directory_name)
+                                                                              # create folder
+                os.mkdir(path)
+                os.mkdir(img_path)
+
+                with open(os.path.join(path, filename), 'w', newline="") as f:
                     fieldnames = ['product_page_url', 'universal_product_code', 'title, price_including_tax',
                                   'price_excluding_tax',
                                   'number_available', 'product_description', 'category', 'review_rating', 'image_url']

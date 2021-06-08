@@ -1,7 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
-from main import filename
+from main import filename, img_directory_name
+from time import sleep
+from random import randint
+
 
 """
 THIS CONTAIN ALL THE FUNCTIONS NECESSARY TO SCRAP PAGES 
@@ -32,7 +35,7 @@ def next_button(link):
 
 def scrap_target_page(url):
     """
-    This function scrap the current page and return a CSV file
+    This function scrap the targeted page and return a CSV file and sleep for 3 between 7s each time end
     """
     product_page_url = url
     universal_product_code = get_universal_product_code(url)
@@ -48,6 +51,7 @@ def scrap_target_page(url):
     csv_writer(product_page_url, universal_product_code, title, price_including_tax,
              price_excluding_tax, number_available, product_description,
              category, review_rating, image_url)
+    sleep(randint(3, 7))
 
 def get_universal_product_code(url):
     """
@@ -241,12 +245,13 @@ def get_img(url):
     """
     This function download image with the title in name in the folders of the programme
     """
-    image_name = get_title(url)
+    image_name = "%s.jpg" % get_title(url)
     link = get_image_url(url)
     response = requests.get(link)
     if response.status_code == 200:
-        with open(image_name + '.jpg', 'wb') as f:
+        with open(os.path.join(img_directory_name, image_name), 'wb') as f:
             f.write(response.content)
+
 
 def csv_writer(product_page_url, universal_product_code, title, price_including_tax, price_excluding_tax,
              number_available, product_description, category, review_rating, image_url):
