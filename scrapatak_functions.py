@@ -41,16 +41,16 @@ def scrap_target_page(url):
     product_page_url = url
     universal_product_code = get_universal_product_code(url)
     title = get_title(url)
-    price_including_tax = get_price_including_taxe(url)
-    price_excluding_tax = get_price_excluding_taxe(url)
+    price_including_taxe = get_price_including_taxe(url)
+    price_excluding_taxe = get_price_excluding_taxe(url)
     number_available = get_number_available(url)
     product_description = get_product_description(url)
     category = get_category(url)
     review_rating = get_review_rating(url)
     image_url = get_image_url(url)
     get_img(image_url)
-    csv_writer(product_page_url, universal_product_code, title, price_including_tax,
-             price_excluding_tax, number_available, product_description,
+    csv_writer(product_page_url, universal_product_code, title, price_including_taxe,
+             price_excluding_taxe, number_available, product_description,
              category, review_rating, image_url)
     sleep(randint(3, 7))
 
@@ -72,7 +72,6 @@ def get_universal_product_code(url):
         j = 0
         for tr in trs:
             argument[j] = tr.find('td').string
-            print(argument + '\n')
             j += 1  # incrémente le compteur du tableau pour passer à la clef-valeur suivante
 
         universal_product_code = argument[0]
@@ -109,7 +108,6 @@ def get_price_including_taxe(url):
         j = 0
         for tr in trs:
             argument[j] = tr.find('td').string
-            print(argument + '\n')
             j += 1
 
         price_including_tax = argument[3]
@@ -133,7 +131,6 @@ def get_price_excluding_taxe(url):
         j = 0
         for tr in trs:
             argument[j] = tr.find('td').string
-            print(argument + '\n')
             j += 1
 
         price_excluding_tax = argument[2]
@@ -157,7 +154,6 @@ def get_number_available(url):
         j = 0
         for tr in trs:
             argument[j] = tr.find('td').string
-            print(argument + '\n')
             j += 1
 
         number_available = argument[5]
@@ -215,7 +211,6 @@ def get_review_rating(url):
         j = 0
         for tr in trs:
             argument[j] = tr.find('td').string
-            print(argument + '\n')
             j += 1
 
         review_rating = argument[6]
@@ -253,12 +248,12 @@ def get_img(url):
             f.write(response.content)
 
 
-def csv_writer(product_page_url, universal_product_code, title, price_including_tax, price_excluding_tax,
+def csv_writer(product_page_url, universal_product_code, title, price_including_taxe, price_excluding_taxe,
              number_available, product_description, category, review_rating, image_url):
     """
     This function take all the resuslt of others fucntion and put it ine CSV file in the programme folder
     """
     with open(filename, 'a', newline="") as f:     # en mode ajout 'a' pour écrire à la suite
 
-        f.write(product_page_url, universal_product_code, title, price_including_tax, price_excluding_tax,
+        f.write(product_page_url, universal_product_code, title, price_including_taxe, price_excluding_taxe,
                 number_available, product_description, category, review_rating, image_url)
