@@ -11,6 +11,7 @@ import os
 THIS CONTAIN ALL THE FUNCTIONS NECESSARY TO SCRAP PAGES 
 """
 
+
 def next_button(link):
     """
     This functions is doing 2 things :
@@ -34,9 +35,11 @@ def next_button(link):
 
         return False
 
+
 def scrap_target_page(url):
     """
     This function scrap the targeted page and return a CSV file and sleep for 3 between 7s each time end
+    and then write all in a CSV file
     """
     product_page_url = url
     universal_product_code = get_universal_product_code(url)
@@ -49,10 +52,14 @@ def scrap_target_page(url):
     review_rating = get_review_rating(url)
     image_url = get_image_url(url)
     get_img(image_url)
-    csv_writer(product_page_url, universal_product_code, title, price_including_taxe,
-             price_excluding_taxe, number_available, product_description,
-             category, review_rating, image_url)
+
+    with open(filename, 'a', newline="") as f:     # en mode ajout 'a' pour écrire à la suite
+        csv_writer = csv.writer(f)
+        csv_writer.writerow(product_page_url, universal_product_code, title, price_including_taxe, price_excluding_taxe,
+                number_available, product_description, category, review_rating, image_url)
+
     sleep(randint(3, 7))
+
 
 def get_universal_product_code(url):
     """
@@ -77,6 +84,7 @@ def get_universal_product_code(url):
         universal_product_code = argument[0]
     return universal_product_code
 
+
 def get_title(url):
     """
     This function take the title of the book
@@ -89,6 +97,7 @@ def get_title(url):
         soup = BeautifulSoup(result.text, 'lxml')
         title = soup.find('h1').get_text()
         return title
+
 
 def get_price_including_taxe(url):
     """
@@ -113,6 +122,7 @@ def get_price_including_taxe(url):
         price_including_tax = argument[3]
     return price_including_tax
 
+
 def get_price_excluding_taxe(url):
     """
     This function take the price excluding taxe and put it in a list in third place
@@ -135,6 +145,7 @@ def get_price_excluding_taxe(url):
 
         price_excluding_tax = argument[2]
     return price_excluding_tax
+
 
 def get_number_available(url):
     """
@@ -159,6 +170,7 @@ def get_number_available(url):
         number_available = argument[5]
     return number_available
 
+
 def get_product_description(url):
     """
     This function take the product description and return it
@@ -172,6 +184,7 @@ def get_product_description(url):
         p = soup.find('p').get_text()     # peut etre un .string
         product_description = p
     return product_description
+
 
 def get_category(url):
     """
@@ -192,6 +205,7 @@ def get_category(url):
             print(category)
         category.replace('HomeBooks', '')
         return category
+
 
 def get_review_rating(url):
     """
@@ -216,6 +230,7 @@ def get_review_rating(url):
         review_rating = argument[6]
     return review_rating
 
+
 def get_image_url(url):
     """
     This function take image link and return it
@@ -236,6 +251,7 @@ def get_image_url(url):
             image_url = link
     return image_url
 
+
 def get_img(url):
     """
     This function download image with the title in name in the folders of the programme
@@ -246,14 +262,3 @@ def get_img(url):
     if response.status_code == 200:
         with open(os.path.join(img_directory_name, image_name), 'wb') as f:
             f.write(response.content)
-
-
-def csv_writer(product_page_url, universal_product_code, title, price_including_taxe, price_excluding_taxe,
-             number_available, product_description, category, review_rating, image_url):
-    """
-    This function take all the resuslt of others fucntion and put it ine CSV file in the programme folder
-    """
-    with open(filename, 'a', newline="") as f:     # en mode ajout 'a' pour écrire à la suite
-
-        f.write(product_page_url, universal_product_code, title, price_including_taxe, price_excluding_taxe,
-                number_available, product_description, category, review_rating, image_url)
