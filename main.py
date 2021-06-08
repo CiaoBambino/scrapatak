@@ -1,13 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
-from scrapatak_functions import *
-"""
-from scrapatak_functions import
-next_button, scrap_target_page, get_universal_product_code, get_title, get_price_including_taxe, 
-get_price_excluding_taxe, get_number_available, get_product_description, get_category, get_review_rating,
-get_image_url, get_img, csv_writer
-"""
+from scrapatak_functions import next_button, scrap_target_page, get_universal_product_code, get_title,
+                                get_price_including_taxe, get_price_excluding_taxe, get_number_available, g
+                                et_product_description, get_category, get_review_rating, get_image_url, get_img, \
+                                csv_writer
+
 import os
 
 """

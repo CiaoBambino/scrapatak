@@ -4,6 +4,7 @@ import csv
 from main import filename, img_directory_name
 from time import sleep
 from random import randint
+import os
 
 
 """
@@ -19,7 +20,7 @@ def next_button(link):
     soupsoja = BeautifulSoup(link.text, 'lxml')  # pas besoin de tester le lien déjà fait dans le main
     child_tag = soupsoja.find('li', {'class': 'next'})
 
-    if childTag:
+    if child_tag:
 
         a = child_tag.find('a')
         next_page = a['href']
