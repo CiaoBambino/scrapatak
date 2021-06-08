@@ -32,7 +32,7 @@ if result.status_code == 200:  # result.ok
             link = a['href']
             category_link[i] = link
 
-            for link in links:      # pour chaque catégorie(lien)
+            for link in category_link:
 
                 name = category_name[i]
                 filename = "%s.csv" % name
