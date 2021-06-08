@@ -19,7 +19,7 @@ if result.status_code == 200:  # result.ok
     print(result)
 
     soup = BeautifulSoup(result.text, 'lxml')
-    category = [{"category_name": "Books", "link": "url.html"}]
+    category_list = [{"category_name": Books, "link": url.html}]
     i = 1
 
     for ultag in soup.findAll('ul', {'class': 'nav nav-list'}):    # on récupère les catégorie
@@ -31,11 +31,11 @@ if result.status_code == 200:  # result.ok
             category_name = a.string
             link = a['href']
             links.append(link)
-            category[i].append({'category_name': category_name, 'link': link})
+            category_list[i].append(category_name, link)  # ({"category_name": category_name, "link": link}) before
 
             for link in links:      # pour chaque catégorie(lien)
 
-                name = category[i]['category_name']    # names
+                name = category_list[i]['category_name']    # names
                 filename = "%s.csv" % name
                 directory_name = "%s" % name
                 img_directory_name = "IMG_%s" % name
