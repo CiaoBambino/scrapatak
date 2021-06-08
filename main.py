@@ -23,7 +23,7 @@ result = requests.get(cible)
 if result.status_code == 200:  # result.ok
     print(result)
 
-    soup = BeautifulSoup(result.text)
+    soup = BeautifulSoup(result.text, 'lxml')
     category = [{"category_name": "Books", "link": "url.html"}]
     i = 1
 
@@ -66,7 +66,7 @@ if result.status_code == 200:  # result.ok
 
                     if current_cat.status_code == 200:
 
-                        soupsale = BeautifulSoup(current_cat.text)          # on récupère les liens des livres
+                        soupsale = BeautifulSoup(current_cat.text, 'lxml')      # on récupère les liens des livres
 
                         for li in soupsale.findALl('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'}):
 

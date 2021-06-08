@@ -16,7 +16,7 @@ def next_button(link):
     - First look for "Next" button that mean we have others pages to scrap and return true if its the case
     - Second get the link of the next page and return it
     """
-    soupsoja = BeautifulSoup(link.text)  # pas besoin de tester le lien déjà fait dans le main
+    soupsoja = BeautifulSoup(link.text, 'lxml')  # pas besoin de tester le lien déjà fait dans le main
     child_tag = soupsoja.find('li', {'class': 'next'})
 
     if childTag:
@@ -63,7 +63,7 @@ def get_universal_product_code(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text)
+        soup = BeautifulSoup(result.text, 'lxml')
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -82,14 +82,13 @@ def get_title(url):
     This function take the title of the book
     """
     result = requests.get(url)
-    title = "unknow"
 
     if result.status_code == 200:  # le resultat est vrai on continu (result.ok)
         print(result)
 
-        soup = BeautifulSoup(result.text)
+        soup = BeautifulSoup(result.text, 'lxml')
         title = soup.find('h1').get_text()
-    return title
+        return title
 
 def get_price_including_taxe(url):
     """
@@ -101,7 +100,7 @@ def get_price_including_taxe(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text)
+        soup = BeautifulSoup(result.text, 'lxml')
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -125,7 +124,7 @@ def get_price_excluding_taxe(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text)
+        soup = BeautifulSoup(result.text, 'lxml')
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -149,7 +148,7 @@ def get_number_available(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text)
+        soup = BeautifulSoup(result.text, 'lxml')
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -172,7 +171,7 @@ def get_product_description(url):
     if result.status_code == 200:  # le resultat est vrai on continu (result.ok)
         print(result)
 
-        soup = BeautifulSoup(result.text)
+        soup = BeautifulSoup(result.text, 'lxml')
         p = soup.find('p').get_text()     # peut etre un .string
         product_description = p
     return product_description
@@ -186,7 +185,7 @@ def get_category(url):
     if result.status_code == 200:  # le resultat est vrai on continu (result.ok)
         print(result)
 
-        soup = BeautifulSoup(result.text)
+        soup = BeautifulSoup(result.text, 'lxml')
         category = "Unknow"
         lis = soup.findALl('li')
         for li in lis:
@@ -207,7 +206,7 @@ def get_review_rating(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text)
+        soup = BeautifulSoup(result.text, 'lxml')
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -231,7 +230,7 @@ def get_image_url(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text)
+        soup = BeautifulSoup(result.text, 'lxml')
 
         divs = soup.findAll('div')
         for div in divs:
