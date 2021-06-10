@@ -16,7 +16,7 @@ def next_button(link):
     - First look for "Next" button that mean we have others pages to scrap and return true if its the case
     - Second get the link of the next page and return it
     """
-    soupsoja = BeautifulSoup(link.text, 'lxml')  # pas besoin de tester le lien déjà fait dans le main
+    soupsoja = BeautifulSoup(link.text)  # pas besoin de tester le lien déjà fait dans le main
     child_tag = soupsoja.find('li', {'class': 'next'})
 
     if child_tag:
@@ -70,7 +70,7 @@ def get_universal_product_code(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text, 'lxml')
+        soup = BeautifulSoup(result.text)
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -132,7 +132,7 @@ def get_price_excluding_taxe(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text, 'lxml')
+        soup = BeautifulSoup(result.text)
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -156,7 +156,7 @@ def get_number_available(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text, 'lxml')
+        soup = BeautifulSoup(result.text)
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -180,7 +180,7 @@ def get_product_description(url):
     if result.status_code == 200:  # le resultat est vrai on continu (result.ok)
         print(result)
 
-        soup = BeautifulSoup(result.text, 'lxml')
+        soup = BeautifulSoup(result.text)
         p = soup.find('p').get_text()     # peut etre un .string
         product_description = p
     return product_description
@@ -195,7 +195,7 @@ def get_category(url):
     if result.status_code == 200:
         print(result)
 
-        soup = BeautifulSoup(result.text, 'lxml')
+        soup = BeautifulSoup(result.text)
         categorie = []
         lis = soup.findALl('li')
 
@@ -203,7 +203,7 @@ def get_category(url):
             a = li.find('a')
             categorie.append(str(a))
 
-        category = categori[2]
+        category = categorie[2]
         return category
 
 
@@ -217,7 +217,7 @@ def get_review_rating(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text, 'lxml')
+        soup = BeautifulSoup(result.text)
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -241,7 +241,7 @@ def get_image_url(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text, 'lxml')
+        soup = BeautifulSoup(result.text)
 
         divs = soup.findAll('div')
         for div in divs:

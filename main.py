@@ -17,7 +17,7 @@ result = requests.get(cible)
 if result.status_code == 200:  # result.ok
     print(result)
 
-    soup = BeautifulSoup(result.text, 'lxml')
+    soup = BeautifulSoup(result.text)
     category_link = []
     category_name = []
     i = 1
@@ -59,7 +59,7 @@ if result.status_code == 200:  # result.ok
 
                     if current_cat.status_code == 200:
 
-                        soupsale = BeautifulSoup(current_cat.text, 'lxml')      # on récupère les liens des livres
+                        soupsale = BeautifulSoup(current_cat.text)      # on récupère les liens des livres
 
                         for li in soupsale.findALl('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'}):
 
@@ -67,7 +67,7 @@ if result.status_code == 200:  # result.ok
                             url = b['href']
                             scrap_target_page(url, filename, img_directory_name)
 
-                        if next_button(link) is True:  # if next button so next page so scrap all of them
+                        if next_button(link) is True:  # if next button so there is a next page so scrap all of them
 
                             _, next_page_link = next_button(link)  # on peut faire comme ça aussi "function()[1]"
                             scrap_target_page(next_page_link, filename, img_directory_name)
