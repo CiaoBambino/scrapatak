@@ -1,4 +1,4 @@
-from functions import create_folder, get_all_category, get_books_url_from_category, scrap_target_page
+from scrapatak_functions import create_folder, get_all_category, get_books_url_from_category, scrap_target_page
 
 cible = 'http://books.toscrape.com/index.html'
 
