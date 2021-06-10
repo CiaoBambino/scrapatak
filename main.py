@@ -17,20 +17,20 @@ result = requests.get(cible)
 if result.status_code == 200:  # result.ok
     print(result)
 
-    soup = BeautifulSoup(result.text)
+    soup = BeautifulSoup(result.text, features="html.parser")
     category_link = []
     category_name = []
-    i = 1
+    i = 0
 
     for ultag in soup.findAll('ul', {'class': 'nav nav-list'}):    # on récupère les catégorie
 
         for litag in ultag.findAll('li'):
 
             a = litag.find('a')
-            b = a.soup.get_text()
-            category_name[i] = b
-            link = a['href']
-            category_link[i] = link
+            b = a.get_text()
+            category_name.append(b)
+            lien = a['href']
+            category_link.append(lien)
 
             for link in category_link:
 

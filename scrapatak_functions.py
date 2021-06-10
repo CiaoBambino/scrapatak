@@ -238,7 +238,7 @@ def get_image_url(url):
     result = requests.get(url)
     image_url = "unknow"
 
-    if result.status_code == 200:  # result.ok
+    if result.status_code == 200:
         print(result)
 
         soup = BeautifulSoup(result.text)
