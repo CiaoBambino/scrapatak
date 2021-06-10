@@ -1,7 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import csv
-from main import filename, img_directory_name
 from time import sleep
 from random import randint
 import os
@@ -14,7 +12,7 @@ THIS CONTAIN ALL THE FUNCTIONS NECESSARY TO SCRAP PAGES
 
 def next_button(link):
     """
-    This functions is doing 2 things :
+    This function is doing 2 things :
     - First look for "Next" button that mean we have others pages to scrap and return true if its the case
     - Second get the link of the next page and return it
     """
@@ -36,7 +34,7 @@ def next_button(link):
         return False
 
 
-def scrap_target_page(url):
+def scrap_target_page(url, filename, img_directory_name):
     """
     This function scrap the targeted page and return a CSV file and sleep for 3 between 7s each time end
     and then write all in a CSV file
@@ -51,7 +49,7 @@ def scrap_target_page(url):
     category = get_category(url)
     review_rating = get_review_rating(url)
     image_url = get_image_url(url)
-    get_img(image_url)
+    get_img(image_url, img_directory_name)
 
     with open(filename, 'a', newline="") as f:     # en mode ajout 'a' pour écrire à la suite
 
@@ -178,6 +176,7 @@ def get_product_description(url):
     """
     result = requests.get(url)
     product_description = "Empty"
+
     if result.status_code == 200:  # le resultat est vrai on continu (result.ok)
         print(result)
 
@@ -193,18 +192,18 @@ def get_category(url):
     """
     result = requests.get(url)
 
-    if result.status_code == 200:  # le resultat est vrai on continu (result.ok)
+    if result.status_code == 200:
         print(result)
 
         soup = BeautifulSoup(result.text, 'lxml')
-        category = "Unknow"
+        categorie = []
         lis = soup.findALl('li')
 
         for li in lis:
-            a = li.find('a')    # précedente version c = a.string, category += c
-            category += str(a)
+            a = li.find('a')
+            categorie.append(str(a))
 
-        category.replace('UnknowHomeBooks', '')
+        category = categori[2]
         return category
 
 
@@ -253,13 +252,15 @@ def get_image_url(url):
     return image_url
 
 
-def get_img(url):
+def get_img(url, img_directory_name):
     """
     This function download image with the title in name in the folders of the programme
     """
     image_name = "%s.jpg" % get_title(url)
     link = get_image_url(url)
     response = requests.get(link)
+
     if response.status_code == 200:
+
         with open(os.path.join(img_directory_name, image_name), 'wb') as f:
             f.write(response.content)

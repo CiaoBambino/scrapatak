@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 from scrapatak_functions import next_button, scrap_target_page
-
 import os
 
 """
@@ -28,7 +27,8 @@ if result.status_code == 200:  # result.ok
         for litag in ultag.findAll('li'):
 
             a = litag.find('a')
-            category_name[i] = a.string
+            b = a.soup.get_text()
+            category_name[i] = b
             link = a['href']
             category_link[i] = link
 
@@ -65,16 +65,16 @@ if result.status_code == 200:  # result.ok
 
                             b = li.find('a')
                             url = b['href']
-                            scrap_target_page(url)
+                            scrap_target_page(url, filename, img_directory_name)
 
                         if next_button(link) is True:  # if next button so next page so scrap all of them
 
                             _, next_page_link = next_button(link)  # on peut faire comme ça aussi "function()[1]"
-                            scrap_target_page(next_page_link)
+                            scrap_target_page(next_page_link, filename, img_directory_name)
 
                             while next_button(next_page_link) is True:  # tant qu'il y a un bouton next
 
                                 _, next_page_link = next_button(next_page_link)  # copy next page link
-                                scrap_target_page(next_page_link)
+                                scrap_target_page(next_page_link, filename, img_directory_name)
 
-            i += 1  # on incrémente pour passé à la case clef valeur suivante et parcourir le dictionnaire
+            i += 1  # on incrémente pour passer à la case clef valeur suivante et parcourir les listes
