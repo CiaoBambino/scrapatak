@@ -32,7 +32,7 @@ def get_all_category(cible):
         return category_link, category_name
 
 
-def get_books_url_from_category(category_link, category_name):
+def get_books_url_from_category(category_link):
 
     i = 0
     j = len(category_link)
@@ -88,7 +88,7 @@ def get_books_url_from_category(category_link, category_name):
 
             i += 1
 
-        return book_links_per_category, category_name
+        return book_links_per_category
 
 
 def scrap_target_page(book_links_per_category, category_name):
@@ -127,7 +127,7 @@ def scrap_target_page(book_links_per_category, category_name):
             sleep(randint(3, 7))
 
 
-def create_folder(_, category_name):
+def create_folder(category_name):
 
     for i in category_name:
 
