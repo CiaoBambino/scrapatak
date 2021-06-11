@@ -127,11 +127,11 @@ def scrap_target_page(book_links_per_category, category_name):
             complete_name = os.path.join(directory_name, filename)
 
             with open(complete_name, 'a', encoding='utf8') as f:     # en mode 'a' pour écrire à la suite
-                f.write(product_page_url + universal_product_code + title + price_including_taxe +
-                        price_excluding_taxe + number_available + product_description + category + review_rating +
-                        image_url)
+                f.write(product_page_url + "," + universal_product_code + "," + title + "," + price_including_taxe +
+                        "," + price_excluding_taxe + "," + number_available + "," + product_description + "," + category
+                        + "," + review_rating + "," + image_url)
 
-            sleep(randint(3, 7))
+            sleep(randint(3, 5))
 
 
 def create_folder(category_name):
@@ -242,8 +242,8 @@ def get_price_including_taxe(url):
 
         argument_modifier = str(argument[3])
         new_argument = argument_modifier[1:]  # supprime le caractere Â devant le prix en livre Â£51.5...
-        price_including_tax = new_argument
-        return price_including_tax
+        price_including_taxe = new_argument
+        return price_including_taxe
 
 
 def get_price_excluding_taxe(url):
@@ -268,9 +268,9 @@ def get_price_excluding_taxe(url):
 
         argument_modifier = str(argument[2])
         new_argument = argument_modifier[1:]  # supprime le caractere Â devant le prix en livre Â£51.5...
-        price_excluding_tax = new_argument
+        price_excluding_taxe = new_argument
 
-        return price_excluding_tax
+        return price_excluding_taxe
 
 
 def get_number_available(url):
@@ -390,7 +390,11 @@ def get_img(url, title, category_name, i):
     This function download image with the title in name in the folders of the programme
     """
     name = category_name[i]
-    image_name = "%s.jpg" % title
+    default_name = "%s.jpg" % title
+    a = "><:|?*."
+    for char in a:  # for chars in espace: default_name = default_name.replace(chars, "_")
+        default_name = default_name.replace(char, "")
+    image_name = default_name.capitalize()
     response = requests.get(url)
     directory_name = "%s" % name
 
