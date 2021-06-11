@@ -7,11 +7,17 @@ import re
 import csv
 
 """
-THIS CONTAIN ALL THE FUNCTIONS NECESSARY TO SCRAP PAGES 
+There are 15 functions. ONLY get_all_category, create_folder, get_books_url_from_category and scrap_target_page
+get call in the main in the following order.
 """
 
 
 def get_all_category(cible):
+    """
+    this function take all the category from the main page of the website and return 2 list :
+    - one for category names
+    - one for category links
+    """
 
     result = requests.get(cible)
 
@@ -38,6 +44,11 @@ def get_all_category(cible):
 
 
 def get_books_url_from_category(category_link):
+    """
+    This function take the category link list and use it to make a 2D list with all the books product page link's
+    It also look for other pages to scrap on the same category
+    It return the 2D list
+    """
 
     i = 0
     j = len(category_link)
@@ -100,7 +111,7 @@ def get_books_url_from_category(category_link):
 
 def scrap_target_page(book_links_per_category, category_name):
     """
-    This function scrap the targeted page and return a CSV file and sleep for 3 between 7s each time end
+    This function scrap the targeted page ,sleep for 3 between 5s each time
     and then write all in a CSV file
     """
 
@@ -142,6 +153,10 @@ def scrap_target_page(book_links_per_category, category_name):
 
 
 def create_folder(category_name):
+    """
+    This function create all the folder with name in the same order that it get scrapped on the main page of the website
+    also precreate empty files with logic names, ready to use for the scrap_target_page function
+    """
 
     for names in category_name:
 
@@ -154,6 +169,7 @@ def create_folder(category_name):
         complete_name = os.path.join(directory_name, filename)
 
         with open(complete_name, 'w') as f:
+            pass
 
 
 def next_button(link):
@@ -188,7 +204,7 @@ def next_button(link):
 
 def get_universal_product_code(url):
     """
-    This function take the UPC and put it in a list in first place
+    This function take the Universal Product Code (UPC) from the product page and return it
     """
     result = requests.get(url)
 
@@ -211,7 +227,7 @@ def get_universal_product_code(url):
 
 def get_title(url):
     """
-    This function take the title of the book
+    This function take the title of the book from the product page and return it
     """
     result = requests.get(url)
 
@@ -225,7 +241,7 @@ def get_title(url):
 
 def get_price_including_taxe(url):
     """
-    This function take the price including taxe and put it in a list in fourth place
+    This function take the price including taxe from the product page and return it
     """
     result = requests.get(url)
 
@@ -250,7 +266,7 @@ def get_price_including_taxe(url):
 
 def get_price_excluding_taxe(url):
     """
-    This function take the price excluding taxe and put it in a list in third place
+    This function take the price excluding taxe from the product page and return it
     """
     result = requests.get(url)
 
@@ -277,7 +293,7 @@ def get_price_excluding_taxe(url):
 
 def get_number_available(url):
     """
-    This function take the number available of books and put it in a list in sixs place
+    This function take the number available of books from the product page and return it
     """
     result = requests.get(url)
 
@@ -300,7 +316,8 @@ def get_number_available(url):
 
 def get_product_description(url):
     """
-    This function take the product description and return it
+    This function take the product description from the product page and return it modified to not include ","
+    that are use in CSV files
     """
     result = requests.get(url)
 
@@ -319,7 +336,8 @@ def get_product_description(url):
 
 def get_category(url):
     """
-    This function take the categorie of the books on the product page and return it
+    This function take the category of the book from the product page and return it modified to not get the surplus of
+    tabulation, spaces and carriage return
     """
     result = requests.get(url)
 
@@ -336,7 +354,7 @@ def get_category(url):
 
 def get_review_rating(url):
     """
-    This function take the review rating number and put it in a list in seventh place and return it
+    This function take the review rating from the product page and convert it as x/5 and return it
     """
     result = requests.get(url)
 
@@ -372,7 +390,7 @@ def get_review_rating(url):
 
 def get_image_url(url):
     """
-    This function take image link and return it
+    This function take image link from the image on the product page, modify it to be correct and return it
     """
     result = requests.get(url)
     image_url = "unknow"
@@ -392,7 +410,8 @@ def get_image_url(url):
 
 def get_img(url, title, category_name, i):
     """
-    This function download image with the title in name in the folders of the programme
+    This function download image with the title of the book in name in the folders of the programme
+    var i correspond to the position in the 2D list use in the scrap_target_page functions so names matches.
     """
     name = category_name[i]
     default_name = "%s.jpg" % title
