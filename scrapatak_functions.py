@@ -146,12 +146,7 @@ def create_folder(category_name):
 
         complete_name = os.path.join(directory_name, filename)
 
-        with open(complete_name, 'w', newline="") as f:
-            fieldnames = ['product_page_url', 'universal_product_code', 'title', 'price_including_taxe',
-                          'price_excluding_taxe', 'number_available', 'product_description', 'category',
-                          'review_rating', 'image_url']
-            csv_writer = csv.DictWriter(f, fieldnames=fieldnames)
-            csv_writer.writeheader()
+        with open(complete_name, 'w') as f:
 
 
 def next_button(link):
