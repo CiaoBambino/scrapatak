@@ -308,6 +308,9 @@ def get_product_description(url):
         soup = BeautifulSoup(result.text, features='html.parser')
         paragraphe = soup.findAll('p')[3]
         p = paragraphe.get_text()
+        virgule = ","
+        for char in virgule:  # supprime les virgules pour le csv
+            p = p.replace(char, "")
         product_description = p
         return product_description
 
