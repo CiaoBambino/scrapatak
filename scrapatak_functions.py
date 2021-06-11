@@ -4,7 +4,7 @@ from time import sleep
 from random import randint
 import os
 import re
-
+import csv
 
 """
 THIS CONTAIN ALL THE FUNCTIONS NECESSARY TO SCRAP PAGES 
@@ -39,24 +39,25 @@ def get_all_category(cible):
 
 def get_books_url_from_category(category_link):
 
-    i = 1
+    i = 0
     j = len(category_link)
     book_links_per_category = [[] for x in range(j)]    # liste de liste contenant les liens de chaques catégories
 
     for link in category_link:    # pour chaque lien(catégorie)
 
-        current_category = requests.get(link)
+        result = requests.get(link)
 
-        if current_category.status_code == 200:
+        if result.status_code == 200:
 
-            soup = BeautifulSoup(current_category.text)
+            soup = BeautifulSoup(result.text, features='html.parser')
+            lis = soup.findAll('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'})    # récupère url des livres
 
-            for li in soup.findALl('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'}):    # récupère url des livres
+            for li in lis:
 
                 b = li.find('a')
                 url = b['href']
-                book_links_per_category[i].append(url)
-                next_page_link = None
+                firstlink = str(url)[8:]
+                book_links_per_category[i].append('http://books.toscrape.com/catalogue' + firstlink)
 
             if next_button(link) is True:  # s'il y a un bouton next donc une seconde page
 
@@ -66,14 +67,15 @@ def get_books_url_from_category(category_link):
 
                 if next_page.status_code == 200:
 
-                    soup2 = BeautifulSoup(next_page.text)
+                    soup2 = BeautifulSoup(next_page.text, features='html.parser')
 
-                    for li in soup2.findALl('li', {
+                    for lii in soup2.findALl('li', {
                                             'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'}):  # on réitère l'opération
 
-                        a = li.find('a')
+                        a = lii.find('a')
                         urls = a['href']
-                        book_links_per_category[i].append(urls)
+                        secondfirstlink = str(urls)[8:]
+                        book_links_per_category[i].append('http://books.toscrape.com/catalogue' + secondfirstlink)
 
                     while next_button(next_page_link) is True:  # tant qu'il y a un bouton next
 
@@ -82,18 +84,18 @@ def get_books_url_from_category(category_link):
 
                         if another_next_page.status_code == 200:
 
-                            soup3 = BeautifulSoup(another_next_page.text)
+                            soup3 = BeautifulSoup(another_next_page.text, features='html.parser')
 
                             for li in soup3.findALl('li', {
                                                     'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'}):
 
                                 a = li.find('a')
                                 urlss = a['href']
-                                book_links_per_category[i].append(urlss)
+                                thrdfirstlink = str(urlss)[8:]
+                                book_links_per_category[i].append('http://books.toscrape.com/catalogue' + thrdfirstlink)
 
             i += 1
-
-        return book_links_per_category
+    return book_links_per_category
 
 
 def scrap_target_page(book_links_per_category, category_name):
@@ -187,9 +189,8 @@ def get_universal_product_code(url):
     This function take the UPC and put it in a list in first place
     """
     result = requests.get(url)
-    universal_product_code = "Unknow"
 
-    if result.status_code == 200:  # result.ok
+    if result.status_code == 200:
         print(result)
 
         soup = BeautifulSoup(result.text, features='html.parser')
@@ -212,7 +213,7 @@ def get_title(url):
     """
     result = requests.get(url)
 
-    if result.status_code == 200:  # le resultat est vrai on continu (result.ok)
+    if result.status_code == 200:
         print(result)
 
         soup = BeautifulSoup(result.text, features='html.parser')
@@ -225,9 +226,8 @@ def get_price_including_taxe(url):
     This function take the price including taxe and put it in a list in fourth place
     """
     result = requests.get(url)
-    price_including_tax = "Unknow"
 
-    if result.status_code == 200:  # result.ok
+    if result.status_code == 200:
         print(result)
 
         soup = BeautifulSoup(result.text, features='html.parser')
@@ -251,9 +251,8 @@ def get_price_excluding_taxe(url):
     This function take the price excluding taxe and put it in a list in third place
     """
     result = requests.get(url)
-    price_excluding_tax = "Unknow"
 
-    if result.status_code == 200:  # result.ok
+    if result.status_code == 200:
         print(result)
 
         soup = BeautifulSoup(result.text, features='html.parser')
@@ -279,7 +278,6 @@ def get_number_available(url):
     This function take the number available of books and put it in a list in sixs place
     """
     result = requests.get(url)
-    number_available = "Unknow"
 
     if result.status_code == 200:  # result.ok
         print(result)
@@ -303,7 +301,6 @@ def get_product_description(url):
     This function take the product description and return it
     """
     result = requests.get(url)
-    product_description = "Empty"
 
     if result.status_code == 200:
         print(result)
