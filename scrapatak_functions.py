@@ -20,19 +20,21 @@ def get_all_category(cible):
         category_link = []
         category_name = []
         soup = BeautifulSoup(result.text, features='html.parser')
-        litag = soup.findAll('li')
+        lis = soup.findAll('li')[3:53]
 
-        for li in litag[2:]:
-            for link in li.findAll('a')
-                a = link.get('href')
-                links = a
-                b = a.get_text()
-                ouput = re.sub(r"[\n\t\s]*", "", b)
-                category_link.append('http://books.toscrape.com/' + links)
-                category_name.append(ouput)
-                print(links)
-        print(category_name)
-        return category_link, category_name14
+        for li in lis:
+
+            for a in li.findAll('a', href=True):
+
+                if a.text:
+
+                    link = a['href']
+                    b = a.get_text()
+                    ouput = re.sub(r"[\n\t\s]*", "", b)
+                    category_link.append('http://books.toscrape.com/' + link)
+                    category_name.append(ouput)
+
+        return category_link, category_name
 
 
 def get_books_url_from_category(category_link):
@@ -118,11 +120,11 @@ def scrap_target_page(book_links_per_category, category_name):
             image_url = get_image_url(url)
             get_img(image_url, title, category_name, i)
             filename = "%s.csv" % name
-            save_path = '%s' % name
+            directory_name = "%s" % name
 
-            complete_name = os.path.join(save_path, filename)
+            complete_name = os.path.join(directory_name, filename)
 
-            with open(complete_name, 'a', newline="") as f:     # en mode ajout 'a' pour écrire à la suite
+            with open(complete_name, 'a', encoding='utf8') as f:     # en mode 'a' pour écrire à la suite
                 f.write(product_page_url + universal_product_code + title + price_including_taxe +
                         price_excluding_taxe + number_available + product_description + category + review_rating +
                         image_url)
