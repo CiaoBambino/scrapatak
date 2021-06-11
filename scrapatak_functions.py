@@ -393,11 +393,11 @@ def get_img(url, title, category_name, i):
     name = category_name[i]
     image_name = "%s.jpg" % title
     response = requests.get(url)
-    save_path = '%s' % name
+    directory_name = "%s" % name
 
-    complete_name = os.path.join(save_path, image_name)
+    complete_name = os.path.join(directory_name, image_name)
 
     if response.status_code == 200:
 
-        with open(image_name, "wb") as file:
+        with open(complete_name, "wb") as file:
             file.write(response.content)
