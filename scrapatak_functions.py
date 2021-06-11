@@ -321,15 +321,12 @@ def get_category(url):
     if result.status_code == 200:
         print(result)
 
-        soup = BeautifulSoup(result.text)
-        categorie = []
-        lis = soup.findALl('li')
-
-        for li in lis:
-            a = li.find('a')
-            categorie.append(str(a))
-
-        category = categorie[2]
+        soup = BeautifulSoup(result.text, features='html.parser')
+        category = "Unknow"
+        li = soup.findAll('li')[2]
+        a = li.get_text()
+        output = re.sub(r"[\n\t\s]*", "", a)
+        category = output
         return category
 
 
@@ -338,22 +335,34 @@ def get_review_rating(url):
     This function take the review rating number and put it in a list in seventh place and return it
     """
     result = requests.get(url)
-    review_rating = "Unknow"
 
-    if result.status_code == 200:  # result.ok
+    if result.status_code == 200:
         print(result)
 
-        soup = BeautifulSoup(result.text)
+        soup = BeautifulSoup(result.text, features='html.parser')
+        stars = soup.find_all('p', {'class': 'star-rating'})
+        counter = 0
 
-        trs = soup.findAll('tr')
-        argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
+        for star in stars:
+            i = star.attrs['class'][1]
 
-        j = 0
-        for tr in trs:
-            argument[j] = tr.find('td').string
-            j += 1
+            if str(i) == "One":
+                counter = 1
 
-        review_rating = argument[6]
+            elif str(i) == "Two":
+                counter = 2
+
+            elif str(i) == "Three":
+                counter = 3
+
+            elif str(i) == "Four":
+                counter = 4
+            else:
+                counter = 5
+
+        note = "/5"
+        review_rating = str(counter) + note
+        print(review_rating)
         return review_rating
 
 
