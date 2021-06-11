@@ -132,21 +132,22 @@ def scrap_target_page(book_links_per_category, category_name):
 
 def create_folder(category_name):
 
-    i = 0
-
     for names in category_name:
 
-        name = category_name[i]
-        i += 1
+        name = names
         directory_name = "%s" % name
 
         os.mkdir(directory_name)
-        print(directory_name)
         filename = "%s.csv" % name
 
-        with open(filename, 'w', newline="") as f:
-            f.write('product_page_url, universal_product_code, title, price_including_taxe,price_excluding_taxe,\
-                    number_available, product_description, category, review_rating, image_url')
+        complete_name = os.path.join(directory_name, filename)
+
+        with open(complete_name, 'w', newline="") as f:
+            fieldnames = ['product_page_url', 'universal_product_code', 'title', 'price_including_taxe',
+                          'price_excluding_taxe', 'number_available', 'product_description', 'category',
+                          'review_rating', 'image_url']
+            csv_writer = csv.DictWriter(f, fieldnames=fieldnames)
+            csv_writer.writeheader()
 
 
 def next_button(link):
