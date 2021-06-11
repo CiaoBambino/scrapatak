@@ -414,11 +414,12 @@ def get_img(url, title, category_name, i):
     var i correspond to the position in the 2D list use in the scrap_target_page functions so names matches.
     """
     name = category_name[i]
-    default_name = "%s.jpg" % title
-    a = "><:|?*."
+    default_name = "%s" % title
+    a = '"><:|?*.'
     for char in a:  # for chars in espace: default_name = default_name.replace(chars, "_")
         default_name = default_name.replace(char, "")
     image_name = default_name.capitalize()
+    image_name += ".jpg"
     response = requests.get(url)
     directory_name = "%s" % name
 
