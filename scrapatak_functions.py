@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from time import sleep
 from random import randint
 import os
+import re
 
 
 """
@@ -16,25 +17,27 @@ def get_all_category(cible):
 
     if result.status_code == 200:
 
-        soup = BeautifulSoup(result.text, features="html.parser")
         category_link = []
         category_name = []
+        soup = BeautifulSoup(result.text, features='html.parser')
+        litag = soup.findAll('li')
 
-        for ultag in soup.findAll('ul', {'class': 'nav nav-list'}):
-
-            for litag in ultag.findAll('li'):
-
-                a = litag.find('a')
-                link = a['href']
-                category_link.append(link)
-                category_name.append(a.get_text())
-
-        return category_link, category_name
+        for li in litag[2:]:
+            for link in li.findAll('a')
+                a = link.get('href')
+                links = a
+                b = a.get_text()
+                ouput = re.sub(r"[\n\t\s]*", "", b)
+                category_link.append('http://books.toscrape.com/' + links)
+                category_name.append(ouput)
+                print(links)
+        print(category_name)
+        return category_link, category_name14
 
 
 def get_books_url_from_category(category_link):
 
-    i = 0
+    i = 1
     j = len(category_link)
     book_links_per_category = [[] for x in range(j)]    # liste de liste contenant les liens de chaques catégories
 
@@ -129,12 +132,16 @@ def scrap_target_page(book_links_per_category, category_name):
 
 def create_folder(category_name):
 
-    for i in category_name:
+    i = 0
+
+    for names in category_name:
 
         name = category_name[i]
+        i += 1
         directory_name = "%s" % name
 
         os.mkdir(directory_name)
+        print(directory_name)
         filename = "%s.csv" % name
 
         with open(filename, 'w', newline="") as f:
@@ -182,7 +189,7 @@ def get_universal_product_code(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text)
+        soup = BeautifulSoup(result.text, features='html.parser')
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -205,7 +212,7 @@ def get_title(url):
     if result.status_code == 200:  # le resultat est vrai on continu (result.ok)
         print(result)
 
-        soup = BeautifulSoup(result.text, 'lxml')
+        soup = BeautifulSoup(result.text, features='html.parser')
         title = soup.find('h1').get_text()
         return title
 
@@ -220,7 +227,7 @@ def get_price_including_taxe(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text, 'lxml')
+        soup = BeautifulSoup(result.text, features='html.parser')
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -230,7 +237,9 @@ def get_price_including_taxe(url):
             argument[j] = tr.find('td').string
             j += 1
 
-        price_including_tax = argument[3]
+        argument_modifier = str(argument[3])
+        new_argument = argument_modifier[1:]  # supprime le caractere Â devant le prix en livre Â£51.5...
+        price_including_tax = new_argument
         return price_including_tax
 
 
@@ -244,17 +253,21 @@ def get_price_excluding_taxe(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text)
+        soup = BeautifulSoup(result.text, features='html.parser')
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
 
         j = 0
         for tr in trs:
+
             argument[j] = tr.find('td').string
             j += 1
 
-        price_excluding_tax = argument[2]
+        argument_modifier = str(argument[2])
+        new_argument = argument_modifier[1:]  # supprime le caractere Â devant le prix en livre Â£51.5...
+        price_excluding_tax = new_argument
+
         return price_excluding_tax
 
 
@@ -268,7 +281,7 @@ def get_number_available(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text)
+        soup = BeautifulSoup(result.text, features='html.parser')
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -289,11 +302,12 @@ def get_product_description(url):
     result = requests.get(url)
     product_description = "Empty"
 
-    if result.status_code == 200:  # le resultat est vrai on continu (result.ok)
+    if result.status_code == 200:
         print(result)
 
-        soup = BeautifulSoup(result.text)
-        p = soup.find('p').get_text()     # peut etre un .string
+        soup = BeautifulSoup(result.text, features='html.parser')
+        paragraphe = soup.findAll('p')[3]
+        p = paragraphe.get_text()
         product_description = p
         return product_description
 
