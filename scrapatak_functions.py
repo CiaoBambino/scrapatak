@@ -116,7 +116,7 @@ def scrap_target_page(book_links_per_category, category_name):
             category = get_category(url)
             review_rating = get_review_rating(url)
             image_url = get_image_url(url)
-            get_img(image_url, category_name, i)
+            get_img(image_url, title, category_name, i)
             filename = "%s.csv" % name
             save_path = '%s' % name
 
@@ -156,11 +156,11 @@ def next_button(link):
     - Second get the link of the next page and return it
     """
 
-    next_button_link = requests.get(link)
+    result = requests.get(link)
 
-    if next_button_link.status_code == 200:
+    if result.status_code == 200:
 
-        soup = BeautifulSoup(link.text)
+        soup = BeautifulSoup(result.text, features='html.parser')
 
         child_tag = soup.find('li', {'class': 'next'})
 
@@ -168,11 +168,11 @@ def next_button(link):
 
             a = child_tag.find('a')
             next_page = a['href']
-            result = requests.get(next_page)
+            newlink = link.replace("index.html", next_page)
+            result = requests.get(newlink)
 
             if result.status_code == 200:
-
-                return True, next_page
+                return True, newlink
 
         else:
 
@@ -322,7 +322,6 @@ def get_category(url):
         print(result)
 
         soup = BeautifulSoup(result.text, features='html.parser')
-        category = "Unknow"
         li = soup.findAll('li')[2]
         a = li.get_text()
         output = re.sub(r"[\n\t\s]*", "", a)
@@ -376,30 +375,28 @@ def get_image_url(url):
     if result.status_code == 200:
         print(result)
 
-        soup = BeautifulSoup(result.text)
+        soup = BeautifulSoup(result.text, features='html.parser')
 
-        divs = soup.findAll('div')
-        for div in divs:
-            img = div.find('img')
-            print(img)
-            link = img['src']
-            image_url = link
+        images = soup.findAll('img')
+        for image in images:
+            link = image['src']
+            firstlink = str(link)[6:]
+            image_url = "http://books.toscrape.com/" + firstlink
         return image_url
 
 
-def get_img(url, category_name, i):
+def get_img(url, title, category_name, i):
     """
     This function download image with the title in name in the folders of the programme
     """
     name = category_name[i]
-    image_name = "%s.jpg" % get_title(url)
-    link = get_image_url(url)
-    response = requests.get(link)
+    image_name = "%s.jpg" % title
+    response = requests.get(url)
     save_path = '%s' % name
 
     complete_name = os.path.join(save_path, image_name)
 
     if response.status_code == 200:
 
-        with open(complete_name, 'wb') as f:
-            f.write(response.content)
+        with open(image_name, "wb") as file:
+            file.write(response.content)
