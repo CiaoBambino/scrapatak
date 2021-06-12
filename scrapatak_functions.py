@@ -255,9 +255,9 @@ def get_price_including_taxe(url):
             argument[j] = tr.find('td').string
             j += 1
 
-        argument_modifier = str(argument[3])  # peut etre enlever avec le changement des objets soup de .text à .content
-        new_argument = argument_modifier[1:]  # supprime le caractere Â devant le prix en livre Â£51.5...
-        price_including_taxe = new_argument
+        # argument_modifier = str(argument[3])
+        # new_argument = argument_modifier[1:]
+        price_including_taxe = argument[3]
         return price_including_taxe
 
 
@@ -281,9 +281,9 @@ def get_price_excluding_taxe(url):
             argument[j] = tr.find('td').string
             j += 1
 
-        argument_modifier = str(argument[2])
-        new_argument = argument_modifier[1:]  # supprime le caractere Â devant le prix en livre Â£51.5...
-        price_excluding_taxe = new_argument
+        # argument_modifier = str(argument[2])
+        # new_argument = argument_modifier[1:]   supprime le caractere Â devant le prix en livre Â£51.5...
+        price_excluding_taxe = argument[2]
 
         return price_excluding_taxe
 
