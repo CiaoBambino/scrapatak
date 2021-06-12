@@ -138,16 +138,9 @@ def scrap_target_page(book_links_per_category, category_name):
             complete_name = os.path.join(directory_name, filename)
 
             with open(complete_name, 'a', encoding='utf8') as f:     # en mode 'a' pour écrire à la suite
-                f.write('product_page_url' + "," + product_page_url + "\n" +\
-                        'universal_product_code' + "," + universal_product_code + "\n" +\
-                        'title' + "," + title + "\n" +\
-                        'price_including_taxe' + "," + price_including_taxe + "\n" +\
-                        'price_excluding_taxe' + "," + price_excluding_taxe + "\n" +\
-                        'number_available' + "," + number_available + "\n" +\
-                        'product_description' + "," + product_description + "\n" +\
-                        'category'+ "," + category + "\n" +\
-                        'review_rating' + "," + review_rating + "\n" +\
-                        'image_url' + "," + image_url + "\n")
+                f.write(product_page_url + "," + universal_product_code + "," + title + "," + price_including_taxe +
+                        "," + price_excluding_taxe + "," + number_available + "," + product_description + "," + category
+                        + "," + review_rating + "," + image_url + ",")    # ajout d'une virgule a la fin !!!
 
             sleep(randint(3, 5))
 
