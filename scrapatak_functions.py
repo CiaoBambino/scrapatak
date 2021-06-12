@@ -25,7 +25,7 @@ def get_all_category(cible):
 
         category_link = []
         category_name = []
-        soup = BeautifulSoup(result.text, features='html.parser')
+        soup = BeautifulSoup(result.content, features='html.parser')
         lis = soup.findAll('li')[3:53]
 
         for li in lis:
@@ -60,7 +60,7 @@ def get_books_url_from_category(category_link):
 
         if result.status_code == 200:
 
-            soup = BeautifulSoup(result.text, features='html.parser')
+            soup = BeautifulSoup(result.content, features='html.parser')
             lis = soup.findAll('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'})    # récupère url des livres
 
             for li in lis:
@@ -78,7 +78,7 @@ def get_books_url_from_category(category_link):
 
                 if next_page.status_code == 200:
 
-                    soup2 = BeautifulSoup(next_page.text, features='html.parser')
+                    soup2 = BeautifulSoup(next_page.content, features='html.parser')
 
                     for lii in soup2.findALl('li', {
                                             'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'}):  # on réitère l'opération
@@ -95,7 +95,7 @@ def get_books_url_from_category(category_link):
 
                         if another_next_page.status_code == 200:
 
-                            soup3 = BeautifulSoup(another_next_page.text, features='html.parser')
+                            soup3 = BeautifulSoup(another_next_page.content, features='html.parser')
 
                             for li in soup3.findALl('li', {
                                                     'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'}):
@@ -183,7 +183,7 @@ def next_button(link):
 
     if result.status_code == 200:
 
-        soup = BeautifulSoup(result.text, features='html.parser')
+        soup = BeautifulSoup(result.content, features='html.parser')
 
         child_tag = soup.find('li', {'class': 'next'})
 
@@ -211,7 +211,7 @@ def get_universal_product_code(url):
     if result.status_code == 200:
         print(result)
 
-        soup = BeautifulSoup(result.text, features='html.parser')
+        soup = BeautifulSoup(result.content, features='html.parser')
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -234,7 +234,7 @@ def get_title(url):
     if result.status_code == 200:
         print(result)
 
-        soup = BeautifulSoup(result.text, features='html.parser')
+        soup = BeautifulSoup(result.content, features='html.parser')
         title = soup.find('h1').get_text()
         return title
 
@@ -248,7 +248,7 @@ def get_price_including_taxe(url):
     if result.status_code == 200:
         print(result)
 
-        soup = BeautifulSoup(result.text, features='html.parser')
+        soup = BeautifulSoup(result.content, features='html.parser')
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -258,7 +258,7 @@ def get_price_including_taxe(url):
             argument[j] = tr.find('td').string
             j += 1
 
-        argument_modifier = str(argument[3])
+        argument_modifier = str(argument[3])  # peut etre enlever avec le changement des objets soup de .text à .content
         new_argument = argument_modifier[1:]  # supprime le caractere Â devant le prix en livre Â£51.5...
         price_including_taxe = new_argument
         return price_including_taxe
@@ -273,7 +273,7 @@ def get_price_excluding_taxe(url):
     if result.status_code == 200:
         print(result)
 
-        soup = BeautifulSoup(result.text, features='html.parser')
+        soup = BeautifulSoup(result.content, features='html.parser')
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -300,7 +300,7 @@ def get_number_available(url):
     if result.status_code == 200:  # result.ok
         print(result)
 
-        soup = BeautifulSoup(result.text, features='html.parser')
+        soup = BeautifulSoup(result.content, features='html.parser')
 
         trs = soup.findAll('tr')
         argument = {"upc": 0, "product type": 0, "pricee": 0, "pricei": 0, "tax": 0, "available": 0, "review": 0}
@@ -324,7 +324,7 @@ def get_product_description(url):
     if result.status_code == 200:
         print(result)
 
-        soup = BeautifulSoup(result.text, features='html.parser')
+        soup = BeautifulSoup(result.content, features='html.parser')
         paragraphe = soup.findAll('p')[3]
         p = paragraphe.get_text()
         virgule = ","
@@ -344,7 +344,7 @@ def get_category(url):
     if result.status_code == 200:
         print(result)
 
-        soup = BeautifulSoup(result.text, features='html.parser')
+        soup = BeautifulSoup(result.content, features='html.parser')
         li = soup.findAll('li')[2]
         a = li.get_text()
         output = re.sub(r"[\n\t\s]*", "", a)
@@ -361,7 +361,7 @@ def get_review_rating(url):
     if result.status_code == 200:
         print(result)
 
-        soup = BeautifulSoup(result.text, features='html.parser')
+        soup = BeautifulSoup(result.content, features='html.parser')
         stars = soup.find_all('p', {'class': 'star-rating'})
         counter = 0
 
@@ -398,7 +398,7 @@ def get_image_url(url):
     if result.status_code == 200:
         print(result)
 
-        soup = BeautifulSoup(result.text, features='html.parser')
+        soup = BeautifulSoup(result.content, features='html.parser')
 
         images = soup.findAll('img')
         for image in images:
