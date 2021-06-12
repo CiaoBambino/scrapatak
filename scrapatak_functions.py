@@ -155,7 +155,7 @@ def scrap_target_page(book_links_per_category, category_name):
 def create_folder(category_name):
     """
     This function create all the folder with name in the same order that it get scrapped on the main page of the website
-    also precreate empty files with logic names, ready to use for the scrap_target_page function
+    also precreate csv files with logic names and fieldnames, ready to use for the scrap_target_page function
     """
 
     for names in category_name:
@@ -169,7 +169,11 @@ def create_folder(category_name):
         complete_name = os.path.join(directory_name, filename)
 
         with open(complete_name, 'w') as f:
-            pass
+            fieldnames = ['product_page_url', 'universal_product_code', 'title', 'price_including_taxe',
+                          'price_excluding_taxe', 'number_available', 'product_description', 'category',
+                          'review_rating', 'image_url']
+            csv_writer = csv.DictWriter(f, fieldnames=fieldnames)
+            csv_writer.writeheader()
 
 
 def next_button(link):
