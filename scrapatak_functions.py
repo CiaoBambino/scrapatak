@@ -359,10 +359,10 @@ def get_review_rating(url):
         print(result)
 
         soup = BeautifulSoup(result.content, features='html.parser')
-        stars = soup.find_all('p', {'class': 'star-rating'})
+        stars = soup.find('p', {'class': 'star-rating'})
         counter = 0
 
-        for star in stars[0]:
+        for star in stars:
             i = star.attrs['class'][1]
 
             if str(i) == "One":
@@ -397,8 +397,8 @@ def get_image_url(url):
 
         soup = BeautifulSoup(result.content, features='html.parser')
 
-        images = soup.findAll('img')
-        for image in images[0]:
+        images = soup.find('img')
+        for image in images:
             link = image['src']
             firstlink = str(link)[6:]
             image_url = "http://books.toscrape.com/" + firstlink
