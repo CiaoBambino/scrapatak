@@ -140,7 +140,7 @@ def scrap_target_page(book_links_per_category, category_name):
             with open(complete_name, 'a', encoding='utf8') as f:     # en mode 'a' pour écrire à la suite
                 f.write(product_page_url + "," + universal_product_code + "," + title + "," + price_including_taxe +
                         "," + price_excluding_taxe + "," + number_available + "," + product_description + "," + category
-                        + "," + review_rating + "," + image_url + ",")    # ajout d'une virgule a la fin !!!
+                        + "," + review_rating + "," + image_url + "\n")
 
             sleep(randint(3, 5))
 
