@@ -66,7 +66,7 @@ A propos des informations collecter et pour être plus précis le script récolt
 Le programme prend environ une heure pour s'éxecuter entièrement du à une commande visant à attendre 3 à 5 secondes entre chaques livres pour ne pas se faire bannir par le serveur suite à un nombre trop important de requêtes dans un temps imparti.
 Il est possible de supprimer ce temps d'attente en effaçant la ligne 145 de scrapatak_functions. Elle correspond à la dernière ligne de code de la fonction scrap_target_page
 
-## Installation using venv and pip
+## Installation en utilisant venv et pip
 
 1. Cloner ce dépôt de code à l'aide de la commande $ git clone clone https://github.com/CiaoBambino/scrapatak (vous pouvez également télécharger le code en temps qu'archive zip)
 2. Rendez-vous depuis un terminal à la racine du répertoire avec $ cd scrapatak
@@ -74,7 +74,7 @@ Il est possible de supprimer ce temps d'attente en effaçant la ligne 145 de scr
 4. Activez l'environnement virtuel avec $ env\Scripts\activate sur Windows ou $ source env/bin/activate sur MacOs & Linux.
 5. Installez les dépendances du projet avec la commande $ pip install -r requirements.txt
 
-## How is it working (globaly)
+## Comment ça marche
 
 Scrapatak est composé de 15 fonctions.
 Il y en a 4 principales qui sont utilisé dans le main.py.
