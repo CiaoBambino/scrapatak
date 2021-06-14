@@ -8,13 +8,13 @@ About the informations collected to be more precise it's collecting those inform
 * universal_product_code 
 * title 
 * price_including_taxe
-*  price_excluding_taxe 
-*  number_available 
-*  product_description 
-*  category 
-*  review_rating 
-*  image_url
-*  and the image of the book itself
+* price_excluding_taxe 
+* number_available 
+* product_description 
+* category 
+* review_rating 
+* image_url
+* and the image of the book itself
 
 The process it taking about one hour due to the fact that we are waiting between 3 and 5 second after each books to not get ban by the server.
 It can be remove by suppressing the line 145 ,last line of scrap_target_page function in scrapatak_functions.
@@ -50,21 +50,21 @@ You can find this schema looking in the main.py
 
 
 __Scrapatak__ est un scripte python qui vise à récolter certaines informations du site : http://books.toscrape.com/index.html
-Le programme créer un nouveau dossier avec un nom en rapport avec les informations récolter et ce pour chaques catégories du site. Il y place un fichier CSV contenant toutes les informations des livres de la catégorie concernée.
-A propos des informations collecter et pour être plus précis le script récolte sur chaques pages produit : 
+Le programme créer un nouveau dossier avec un nom en rapport avec les informations récolter et ce pour chaque catégories du site. Il y place un fichier CSV contenant toutes les informations des livres de la catégorie concernée.
+A propos des informations collecter et pour être plus précis le script récolte sur chaque pages produit : 
 * product_page_url 
 * universal_product_code 
 * title 
 * price_including_taxe
-*  price_excluding_taxe 
-*  number_available 
-*  product_description 
-*  category 
-*  review_rating 
-*  image_url
-*  et l'image de la couverture du livre
+* price_excluding_taxe 
+* number_available 
+* product_description 
+* category 
+* review_rating 
+* image_url
+* et l'image de la couverture du livre
 
-Le programme prend environ une heure pour s'éxecuter entièrement du à une commande visant à attendre 3 à 5 secondes entre chaques livres pour ne pas se faire bannir par le serveur suite à un nombre trop important de requêtes dans un temps imparti.
+Le programme prend environ une heure pour s'éxecuter entièrement du à une commande visant à attendre 3 à 5 secondes entre chaque livres pour ne pas se faire bannir par le serveur suite à un nombre trop important de requêtes dans un temps imparti.
 Il est possible de supprimer ce temps d'attente en effaçant la ligne 145 de scrapatak_functions. Elle correspond à la dernière ligne de code de la fonction scrap_target_page
 
 ## Installation en utilisant venv et pip
@@ -85,9 +85,9 @@ Et 11 sous fonctions.
 Quand le programme est lancé :
 
 1. Il défini la cible (http://books.toscrape.com/index.html)
-2. Créer deux listes contenant respectivement, l'url de chaque catégorie et le nom de chaques catégories.
+2. Créer deux listes contenant respectivement, l'url de chaque catégorie et le nom de chaque catégories.
 3. Créer tout les dossiers dans lesquels nous allons stocker nos futures données et ce dans le dossier d'exécution du programme.
-4. Créer une liste à deux dimensions contenant les liens menant à chaques pages produit pour chaques catégories.
+4. Créer une liste à deux dimensions contenant les liens menant à chaque pages produit pour chaque catégories.
 5. Récolte les informations en utilisant cette liste à deux dimensions.
 
 Vous pouvez trouver ce schéma en regardant le main.py 
