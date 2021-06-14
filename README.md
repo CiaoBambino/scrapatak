@@ -23,7 +23,7 @@ It can be remove by suppressing the line 145 ,last line of scrap_target_page fun
 
 1. Clone this repository using $ git clone clone https://github.com/CiaoBambino/scrapatak (you can also download the code using as a zip file)
 2. Move to the scrapatak root folder with $ cd scrapatak
-3. Create a virtual environment for the project with $ python -m venv venv(<---the name you want) on Windows or $ python3 -m venv venv on MacOs & Linux.
+3. Create a virtual environment for the project with $ python -m venv venv on Windows or $ python3 -m venv venv on MacOs & Linux.
 4. Activate the virtual environment with $ env\Scripts\activate on windows or $ source env/bin/activate on macos & linux.
 5. Install project dependencies with $ pip install -r requirements.txt
 
@@ -70,7 +70,7 @@ Il est possible de supprimer ce temps d'attente en effaçant la ligne 145 de scr
 
 1. Cloner ce dépôt de code à l'aide de la commande $ git clone clone https://github.com/CiaoBambino/scrapatak (vous pouvez également télécharger le code en temps qu'archive zip)
 2. Rendez-vous depuis un terminal à la racine du répertoire avec $ cd scrapatak
-3. Créer un environnement virtuel pour le projet avec $ python -m venv venv(<---the name you want) sur Windows ou $ python3 -m venv venv Sur MacOs & Linux.
+3. Créer un environnement virtuel pour le projet avec $ python -m venv venv sur Windows ou $ python3 -m venv venv Sur MacOs & Linux.
 4. Activez l'environnement virtuel avec $ env\Scripts\activate sur Windows ou $ source env/bin/activate sur MacOs & Linux.
 5. Installez les dépendances du projet avec la commande $ pip install -r requirements.txt
 
