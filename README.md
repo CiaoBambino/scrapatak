@@ -61,7 +61,7 @@ A propos des informations collecter et pour être plus précis le script récolt
 *  category 
 *  review_rating 
 *  image_url
-*  et l'image de la couverture de livre
+*  et l'image de la couverture du livre
 
 Le programme prend environ une heure pour s'éxecuter entièrement du à une commande visant à attendre 3 à 5 secondes entre chaques livres pour ne pas se faire bannir par le serveur suite à un nombre trop important de requêtes dans un temps imparti.
 Il est possible de supprimer ce temps d'attente en effaçant la ligne 145 de scrapatak_functions. Elle correspond à la dernière ligne de code de la fonction scrap_target_page
