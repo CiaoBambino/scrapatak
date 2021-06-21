@@ -37,7 +37,9 @@ def get_all_category(cible):
                     link = a['href']
                     b = a.get_text()
                     ouput = re.sub(r"[\n\t\s]*", "", b)
-                    category_link.append('http://books.toscrape.com/' + link)
+                    correct_link = ('http://books.toscrape.com/' + link)
+                    s = re.sub('index.html$', 'page-1.html', correct_link)
+                    category_link.append(s)
                     category_name.append(ouput)
 
         return category_link, category_name
@@ -67,44 +69,78 @@ def get_books_url_from_category(category_link):
 
                 b = li.find('a')
                 url = b['href']
-                firstlink = str(url)[8:]
-                book_links_per_category[i].append('http://books.toscrape.com/catalogue' + firstlink)
+                incorrectlink = str(url)[8:]
+                book_links_per_category[i].append('http://books.toscrape.com/catalogue' + incorrectlink)
 
-            if next_button(link) is True:  # s'il y a un bouton next donc une seconde page
+            boolnext = next_button(link)
 
-                _, next_page_link = next_button(link)  # on peut faire comme ça aussi "function()[1]"
+            if boolnext:
 
+                boolnext, next_page_link = next_button(link)
                 next_page = requests.get(next_page_link)
 
                 if next_page.status_code == 200:
 
-                    soup2 = BeautifulSoup(next_page.content, features='html.parser')
+                    soup = BeautifulSoup(next_page.content, features='html.parser')
+                    alllis = soup.findAll('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'})
 
-                    for lii in soup2.findALl('li', {
-                                            'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'}):  # on réitère l'opération
+                    for allli in alllis:
 
-                        a = lii.find('a')
+                        a = allli.find('a')
                         urls = a['href']
-                        secondfirstlink = str(urls)[8:]
-                        book_links_per_category[i].append('http://books.toscrape.com/catalogue' + secondfirstlink)
+                        incorrectlink = str(urls)[8:]
+                        book_links_per_category[i].append('http://books.toscrape.com/catalogue' + incorrectlink)
 
-                    while next_button(next_page_link) is True:  # tant qu'il y a un bouton next
+                    boolnext = next_button(next_page_link)
 
-                        _, next_page_link = next_button(next_page_link)
-                        another_next_page = requests.get(next_page_link)
+                    while boolnext:
 
-                        if another_next_page.status_code == 200:
+                        boolnext, next_page_link = next_button(next_page_link)
+                        next_page = requests.get(next_page_link)
 
-                            soup3 = BeautifulSoup(another_next_page.content, features='html.parser')
+                        if next_page.status_code == 200:
 
-                            for li in soup3.findALl('li', {
-                                                    'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'}):
+                            soup = BeautifulSoup(next_page.content, features='html.parser')
+                            olis = soup.findAll('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'})
 
-                                a = li.find('a')
+                            for oli in olis:
+
+                                a = oli.find('a')
                                 urlss = a['href']
-                                thrdfirstlink = str(urlss)[8:]
-                                book_links_per_category[i].append('http://books.toscrape.com/catalogue' + thrdfirstlink)
+                                incorrectlink = str(urlss)[8:]
+                                book_links_per_category[i].append('http://books.toscrape.com/catalogue' + incorrectlink)
 
+                            boolnext = next_button(next_page_link)
+
+                            if boolnext:
+
+                                boolnext, next_page_link = next_button(next_page_link)
+
+                                next_button_response = next_button(next_page_link)
+
+                                if next_button_response == False:    # it's the last page
+
+                                    next_page = requests.get(next_page_link)
+
+                                    if next_page.status_code == 200:
+
+                                        soup = BeautifulSoup(next_page.content, features='html.parser')
+                                        ollis = soup.findAll('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'})
+
+                                        for olli in ollis:
+                                            a = olli.find('a')
+                                            urlsss = a['href']
+                                            incorrectlink = str(urlsss)[8:]
+                                            book_links_per_category[i].append('http://books.toscrape.com/catalogue'
+                                                                              + incorrectlink)
+                                        break
+
+                                else:
+                                    continue
+                            else:
+                                break
+                        else:
+                            break
             i += 1
     return book_links_per_category
 
@@ -114,12 +150,25 @@ def scrap_target_page(book_links_per_category, category_name):
     This function scrap the targeted page ,sleep for 3 between 5s each time
     and then write all in a CSV file
     """
+    compteur = 0
 
     for i in range(len(book_links_per_category)):
 
+        name = category_name[i]
+        filename = "%s.csv" % name
+        directory_name = "%s" % name
+        complete_name = os.path.join(directory_name, filename)
+
+        with open(complete_name, 'w') as f:
+            fieldnames = ['product_page_url', 'universal_product_code', 'title', 'price_including_taxe',
+                          'price_excluding_taxe', 'number_available', 'product_description', 'category',
+                          'review_rating', 'image_url']
+            csv_writer = csv.DictWriter(f, fieldnames=fieldnames)
+            csv_writer.writeheader()
+
         for j in range(len(book_links_per_category[i])):
 
-            name = category_name[i]
+
             url = book_links_per_category[i][j]
             product_page_url = url
             universal_product_code = get_universal_product_code(url)
@@ -132,23 +181,20 @@ def scrap_target_page(book_links_per_category, category_name):
             review_rating = get_review_rating(url)
             image_url = get_image_url(url)
             get_img(image_url, title, category_name, i)
-            filename = "%s.csv" % name
-            directory_name = "%s" % name
+            compteur += 1
+            print(compteur)
 
-            complete_name = os.path.join(directory_name, filename)
-
-            with open(complete_name, 'a', encoding='utf8') as f:     # en mode 'a' pour écrire à la suite
-                f.write(product_page_url + "," + universal_product_code + "," + title + "," + price_including_taxe +
-                        "," + price_excluding_taxe + "," + number_available + "," + product_description + "," + category
-                        + "," + review_rating + "," + image_url + ",")    # virgule à la fin pour le prochain produit
-
+            with open(complete_name, 'a', newline="", encoding='utf8') as f:
+                contenu = (product_page_url, universal_product_code, title, price_including_taxe, price_excluding_taxe,
+                           number_available, product_description, category, review_rating, image_url)
+                writer = csv.writer(f)
+                writer.writerow(contenu)
             sleep(randint(3, 5))
 
 
 def create_folder(category_name):
     """
     This function create all the folder with name in the same order that it get scrapped on the main page of the website
-    also precreate csv files with logic names and fieldnames, ready to use for the scrap_target_page function
     """
 
     for names in category_name:
@@ -157,16 +203,8 @@ def create_folder(category_name):
         directory_name = "%s" % name
 
         os.mkdir(directory_name)
-        filename = "%s.csv" % name
 
-        complete_name = os.path.join(directory_name, filename)
 
-        with open(complete_name, 'w') as f:
-            fieldnames = ['product_page_url', 'universal_product_code', 'title', 'price_including_taxe',
-                          'price_excluding_taxe', 'number_available', 'product_description', 'category',
-                          'review_rating', 'image_url']
-            csv_writer = csv.DictWriter(f, fieldnames=fieldnames)
-            csv_writer.writeheader()
 
 
 def next_button(link):
@@ -183,20 +221,41 @@ def next_button(link):
         soup = BeautifulSoup(result.content, features='html.parser')
 
         child_tag = soup.find('li', {'class': 'next'})
+        finlink = link[-10:]
+        stringindex = "index.html"
 
-        if child_tag:
+        if finlink == stringindex:
 
-            a = child_tag.find('a')
-            next_page = a['href']
-            newlink = link.replace("index.html", next_page)
-            result = requests.get(newlink)
+            if child_tag:
 
-            if result.status_code == 200:
-                return True, newlink
+                a = child_tag.find('a')
+                next_page = a['href']
+                next_page_link = str(link[:-10] + next_page)
+
+                result = requests.get(next_page_link)
+
+                if result.status_code == 200:
+                    return True, next_page_link
+
+            else:
+
+                return False
 
         else:
+            if child_tag:
 
-            return False
+                a = child_tag.find('a')
+                next_page = a['href']
+                next_page_link = str(link[:-11] + next_page)
+
+                result = requests.get(next_page_link)
+
+                if result.status_code == 200:
+                    return True, next_page_link
+
+            else:
+
+                return False
 
 
 def get_universal_product_code(url):
@@ -359,31 +418,9 @@ def get_review_rating(url):
         print(result)
 
         soup = BeautifulSoup(result.content, features='html.parser')
-        stars = soup.findAll('p', {'class': 'star-rating'})
-        counter = 0
-        review_rating = []
+        review_rating = soup.findAll('p', {'class': 'star-rating'})
 
-        for star in stars:
-            i = star.attrs['class'][1]
-
-            if str(i) == "One":
-                counter = 1
-
-            elif str(i) == "Two":
-                counter = 2
-
-            elif str(i) == "Three":
-                counter = 3
-
-            elif str(i) == "Four":
-                counter = 4
-            else:
-                counter = 5
-
-            note = "/5"
-            review_rating.append(str(counter) + note)
-
-        return review_rating[0]
+        return review_rating
 
 
 def get_image_url(url):
@@ -416,7 +453,7 @@ def get_img(url, title, category_name, i):
     """
     name = category_name[i]
     default_name = "%s" % title
-    a = '"><:|?*.'
+    a = '"><:|?*.\/'
     for char in a:  # for chars in espace: default_name = default_name.replace(chars, "_")
         default_name = default_name.replace(char, "")
     image_name = default_name.capitalize()
