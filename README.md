@@ -17,7 +17,7 @@ About the informations collected to be more precise it's collecting those inform
 * and the image of the book itself
 
 The process it taking about one hour due to the fact that we are waiting between 3 and 5 second after each books to not get ban by the server.
-It can be remove by suppressing the line 145 ,last line of scrap_target_page function in scrapatak_functions.
+It can be remove by suppressing the line 198.
 
 ## Installation using venv and pip
 
@@ -30,17 +30,17 @@ It can be remove by suppressing the line 145 ,last line of scrap_target_page fun
 
 ## How is it working (globaly)
 
-Scrapatak is made of 15 functions.
+Scrapatak is made of 16 functions.
 There are 4 principal functions that get use in the main.py
-And 11 sub-fonctions.
+And 12 sub-fonctions.
 
 When the programme is running:
 
 1. We define the target (http://books.toscrape.com/index.html)
 2. We create 2 lists containing all the links and names of each categories
 3. We create all the folder to store our result in the programme directory
-4. We create a 2D list with all links from all books for all categories
-5. we scrap all this using the 2D list
+4. We create a list with all links from all books
+5. we scrap all this using the list
 
 You can find this schema looking in the main.py 
 
@@ -65,7 +65,7 @@ A propos des informations collecter et pour être plus précis le script récolt
 * et l'image de la couverture du livre
 
 Le programme prend environ une heure pour s'éxecuter entièrement du à une commande visant à attendre 3 à 5 secondes entre chaque livres pour ne pas se faire bannir par le serveur suite à un nombre trop important de requêtes dans un temps imparti.
-Il est possible de supprimer ce temps d'attente en effaçant la ligne 145 de scrapatak_functions. Elle correspond à la dernière ligne de code de la fonction scrap_target_page
+Il est possible de supprimer ce temps d'attente en effaçant la ligne 198 de scrapatak_functions.
 
 ## Installation en utilisant venv et pip
 
@@ -78,9 +78,9 @@ Il est possible de supprimer ce temps d'attente en effaçant la ligne 145 de scr
 
 ## Comment ça marche
 
-Scrapatak est composé de 15 fonctions.
+Scrapatak est composé de 16 fonctions.
 Il y en a 4 principales qui sont utilisé dans le main.py.
-Et 11 sous fonctions.
+Et 12 sous fonctions.
 
 Quand le programme est lancé :
 
