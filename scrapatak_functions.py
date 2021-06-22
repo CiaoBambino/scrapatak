@@ -7,8 +7,8 @@ import re
 import csv
 
 """
-There are 15 functions. ONLY get_all_category, create_folder, get_books_url_from_category and scrap_target_page
-get call in the main in the following order.
+There are 16 functions. ONLY get_all_category, create_folder, get_books_url and scrap_page get call in the main in the 
+following order.
 """
 
 
@@ -33,130 +33,28 @@ def get_all_category(cible):
             for a in li.findAll('a', href=True):
 
                 if a.text:
-
                     link = a['href']
                     b = a.get_text()
                     ouput = re.sub(r"[\n\t\s]*", "", b)
                     correct_link = ('http://books.toscrape.com/' + link)
-                    s = re.sub('index.html$', 'page-1.html', correct_link)
-                    category_link.append(s)
+                    category_link.append(correct_link)
                     category_name.append(ouput)
 
         return category_link, category_name
 
 
-def get_books_url_from_category(category_link):
+def create_folder(category_name):
     """
-    This function take the category link list and use it to make a 2D list with all the books product page link's
-    It also look for other pages to scrap on the same category
-    It return the 2D list
+    This function create all the folder with name in the same order that it get scrapped on the main page of the website
     """
 
-    i = 0
-    j = len(category_link)
-    book_links_per_category = [[] for x in range(j)]    # liste de liste contenant les liens de chaques catégories
-
-    for link in category_link:    # pour chaque lien(catégorie)
-
-        result = requests.get(link)
-
-        if result.status_code == 200:
-
-            soup = BeautifulSoup(result.content, features='html.parser')
-            lis = soup.findAll('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'})    # récupère url des livres
-
-            for li in lis:
-
-                b = li.find('a')
-                url = b['href']
-                incorrectlink = str(url)[8:]
-                book_links_per_category[i].append('http://books.toscrape.com/catalogue' + incorrectlink)
-
-            boolnext = next_button(link)
-
-            if boolnext:
-
-                boolnext, next_page_link = next_button(link)
-                next_page = requests.get(next_page_link)
-
-                if next_page.status_code == 200:
-
-                    soup = BeautifulSoup(next_page.content, features='html.parser')
-                    alllis = soup.findAll('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'})
-
-                    for allli in alllis:
-
-                        a = allli.find('a')
-                        urls = a['href']
-                        incorrectlink = str(urls)[8:]
-                        book_links_per_category[i].append('http://books.toscrape.com/catalogue' + incorrectlink)
-
-                    boolnext = next_button(next_page_link)
-
-                    while boolnext:
-
-                        boolnext, next_page_link = next_button(next_page_link)
-                        next_page = requests.get(next_page_link)
-
-                        if next_page.status_code == 200:
-
-                            soup = BeautifulSoup(next_page.content, features='html.parser')
-                            olis = soup.findAll('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'})
-
-                            for oli in olis:
-
-                                a = oli.find('a')
-                                urlss = a['href']
-                                incorrectlink = str(urlss)[8:]
-                                book_links_per_category[i].append('http://books.toscrape.com/catalogue' + incorrectlink)
-
-                            boolnext = next_button(next_page_link)
-
-                            if boolnext:
-
-                                boolnext, next_page_link = next_button(next_page_link)
-
-                                next_button_response = next_button(next_page_link)
-
-                                if next_button_response == False:    # it's the last page
-
-                                    next_page = requests.get(next_page_link)
-
-                                    if next_page.status_code == 200:
-
-                                        soup = BeautifulSoup(next_page.content, features='html.parser')
-                                        ollis = soup.findAll('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'})
-
-                                        for olli in ollis:
-                                            a = olli.find('a')
-                                            urlsss = a['href']
-                                            incorrectlink = str(urlsss)[8:]
-                                            book_links_per_category[i].append('http://books.toscrape.com/catalogue'
-                                                                              + incorrectlink)
-                                        break
-
-                                else:
-                                    continue
-                            else:
-                                break
-                        else:
-                            break
-            i += 1
-    return book_links_per_category
-
-
-def scrap_target_page(book_links_per_category, category_name):
-    """
-    This function scrap the targeted page ,sleep for 3 between 5s each time
-    and then write all in a CSV file
-    """
-    compteur = 0
-
-    for i in range(len(book_links_per_category)):
-
-        name = category_name[i]
+    for names in category_name:
+        name = names
         filename = "%s.csv" % name
         directory_name = "%s" % name
+
+        os.mkdir(directory_name)
+
         complete_name = os.path.join(directory_name, filename)
 
         with open(complete_name, 'w') as f:
@@ -166,54 +64,11 @@ def scrap_target_page(book_links_per_category, category_name):
             csv_writer = csv.DictWriter(f, fieldnames=fieldnames)
             csv_writer.writeheader()
 
-        for j in range(len(book_links_per_category[i])):
 
-
-            url = book_links_per_category[i][j]
-            product_page_url = url
-            universal_product_code = get_universal_product_code(url)
-            title = get_title(url)
-            price_including_taxe = get_price_including_taxe(url)
-            price_excluding_taxe = get_price_excluding_taxe(url)
-            number_available = get_number_available(url)
-            product_description = get_product_description(url)
-            category = get_category(url)
-            review_rating = get_review_rating(url)
-            image_url = get_image_url(url)
-            get_img(image_url, title, category_name, i)
-            compteur += 1
-            print(compteur)
-
-            with open(complete_name, 'a', newline="", encoding='utf8') as f:
-                contenu = (product_page_url, universal_product_code, title, price_including_taxe, price_excluding_taxe,
-                           number_available, product_description, category, review_rating, image_url)
-                writer = csv.writer(f)
-                writer.writerow(contenu)
-            sleep(randint(3, 5))
-
-
-def create_folder(category_name):
+def if_next_page(link):
     """
-    This function create all the folder with name in the same order that it get scrapped on the main page of the website
+    This function is looking for a "next button" and return true or false
     """
-
-    for names in category_name:
-
-        name = names
-        directory_name = "%s" % name
-
-        os.mkdir(directory_name)
-
-
-
-
-def next_button(link):
-    """
-    This function is doing 2 things :
-    - First look for "Next" button that mean we have others pages to scrap and return true if its the case
-    - Second get the link of the next page and return it
-    """
-
     result = requests.get(link)
 
     if result.status_code == 200:
@@ -221,41 +76,126 @@ def next_button(link):
         soup = BeautifulSoup(result.content, features='html.parser')
 
         child_tag = soup.find('li', {'class': 'next'})
-        finlink = link[-10:]
-        stringindex = "index.html"
 
-        if finlink == stringindex:
-
-            if child_tag:
-
-                a = child_tag.find('a')
-                next_page = a['href']
-                next_page_link = str(link[:-10] + next_page)
-
-                result = requests.get(next_page_link)
-
-                if result.status_code == 200:
-                    return True, next_page_link
-
-            else:
-
-                return False
+        if child_tag:
+            return True
 
         else:
-            if child_tag:
+            return False
 
-                a = child_tag.find('a')
-                next_page = a['href']
-                next_page_link = str(link[:-11] + next_page)
 
+def get_next_button_url(link):
+    """
+    This function get the link of the next page and all others pages after
+    """
+    result = requests.get(link)
+
+    if result.status_code == 200:
+
+        soup = BeautifulSoup(result.content, features='html.parser')
+
+        child_tag = soup.find('li', {'class': 'next'})
+        a = child_tag.find('a')
+        next_page = a['href']
+        comparelink = "index.html"
+        next_page_link = "ERROR : get_next_button_url"
+
+        if link[-10:] == comparelink:
+            next_page_link = str(link[:-10] + next_page)
+
+        else:
+            next_page_link = str(link[:-11] + next_page)
+
+        result = requests.get(next_page_link)
+
+        if result.status_code == 200:
+            return next_page_link
+
+
+def get_books_url(category_link):
+    """
+    This function take all the urls from books of the website
+    """
+    book_page_url = []
+    for link in category_link:
+
+        result = requests.get(link)
+
+        if result.status_code == 200:
+
+            soup = BeautifulSoup(result.content, features='html.parser')
+            lis = soup.findAll('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'})
+
+            for li in lis:
+                b = li.find('a')
+                url = b['href']
+                incorrectlink = str(url)[8:]
+                book_page_url.append('http://books.toscrape.com/catalogue' + incorrectlink)
+
+            current_page_link = link
+            is_other_page = if_next_page(current_page_link)
+
+            while is_other_page:
+
+                next_page_link = get_next_button_url(current_page_link)
+                current_page_link = next_page_link
                 result = requests.get(next_page_link)
 
                 if result.status_code == 200:
-                    return True, next_page_link
 
-            else:
+                    soup = BeautifulSoup(result.content, features='html.parser')
+                    lis = soup.findAll('li', {'class': 'col-xs-6 col-sm-4 col-md-3 col-lg-3'})
 
-                return False
+                    for li in lis:
+                        b = li.find('a')
+                        url = b['href']
+                        incorrectlink = str(url)[8:]
+                        book_page_url.append('http://books.toscrape.com/catalogue' + incorrectlink)
+
+                    is_other_page = if_next_page(current_page_link)
+
+                else:
+                    break
+
+    return book_page_url
+
+
+def scrap_page(book_page_url):
+    """
+    This function scrap the targeted page ,sleep for 3 between 5s each time
+    and then write all in a CSV file
+    """
+
+    compteur = 0
+
+    for url in book_page_url:
+
+        product_page_url = url
+        universal_product_code = get_universal_product_code(url)
+        title = get_title(url)
+        price_including_taxe = get_price_including_taxe(url)
+        price_excluding_taxe = get_price_excluding_taxe(url)
+        number_available = get_number_available(url)
+        product_description = get_product_description(url)
+        category = get_category(url)
+        review_rating = get_review_rating(url)
+        image_url = get_image_url(url)
+        get_img(image_url, title, category)
+
+        compteur += 1
+        print(compteur)
+
+        name = category
+        filename = "%s.csv" % name
+        directory_name = "%s" % name
+        complete_name = os.path.join(directory_name, filename)
+
+        with open(complete_name, 'a', newline="", encoding='utf8') as f:
+            contenu = (product_page_url, universal_product_code, title, price_including_taxe, price_excluding_taxe,
+                       number_available, product_description, category, review_rating, image_url)
+            writer = csv.writer(f)
+            writer.writerow(contenu)
+        # sleep(randint(3, 5))
 
 
 def get_universal_product_code(url):
@@ -383,7 +323,7 @@ def get_product_description(url):
         soup = BeautifulSoup(result.content, features='html.parser')
         paragraphe = soup.findAll('p')[3]
         p = paragraphe.get_text()
-        virgule = ","
+        virgule = ",;"
         for char in virgule:  # supprime les virgules pour le csv
             p = p.replace(char, "")
         product_description = p
@@ -418,9 +358,31 @@ def get_review_rating(url):
         print(result)
 
         soup = BeautifulSoup(result.content, features='html.parser')
-        review_rating = soup.findAll('p', {'class': 'star-rating'})
+        stars = soup.findAll('p', {'class': 'star-rating'})
+        counter = 0
+        review_rating = []
 
-        return review_rating
+        for star in stars:
+            i = star.attrs['class'][1]
+
+            if str(i) == "One":
+                counter = 1
+
+            elif str(i) == "Two":
+                counter = 2
+
+            elif str(i) == "Three":
+                counter = 3
+
+            elif str(i) == "Four":
+                counter = 4
+            else:
+                counter = 5
+
+            note = " sur 5"
+            review_rating.append(str(counter) + note)
+
+        return review_rating[0]
 
 
 def get_image_url(url):
@@ -446,12 +408,12 @@ def get_image_url(url):
         return image_url[0]
 
 
-def get_img(url, title, category_name, i):
+def get_img(url, title, category):
     """
     This function download image with the title of the book in name in the folders of the programme
     var i correspond to the position in the 2D list use in the scrap_target_page functions so names matches.
     """
-    name = category_name[i]
+    name = category
     default_name = "%s" % title
     a = '"><:|?*.\/'
     for char in a:  # for chars in espace: default_name = default_name.replace(chars, "_")

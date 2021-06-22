@@ -1,8 +1,8 @@
-from scrapatak_functions import create_folder, get_all_category, get_books_url_from_category, scrap_target_page
+from scrapatak_functions import get_all_category, create_folder, get_books_url, scrap_page
 
 
 """
-                      THIS IS SCRAPATAK 3.0 
+                      THIS IS SCRAPATAK 4.0 
 	
 +------+.      +------+       +------+       +------+      .+------+
 |`.    | `.    |\     |\      |      |      /|     /|    .' |    .'|
@@ -25,5 +25,5 @@ cible = 'http://books.toscrape.com/index.html'
 
 category_link, category_name = get_all_category(cible)
 create_folder(category_name)
-book_links_per_category = get_books_url_from_category(category_link)
-scrap_target_page(book_links_per_category, category_name)
+book_page_url = get_books_url(category_link)
+scrap_page(book_page_url)
