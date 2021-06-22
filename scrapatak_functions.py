@@ -160,7 +160,7 @@ def get_books_url(category_link):
     return book_page_url
 
 
-def scrap_page(book_page_url):
+def scrap(book_page_url):
     """
     This function scrap the targeted page ,sleep for 3 between 5s each time
     and then write all in a CSV file (i put sleep function in comment to go faster)
