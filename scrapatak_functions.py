@@ -7,8 +7,8 @@ import re
 import csv
 
 """
-There are 16 functions. ONLY get_all_category, create_folder, get_books_url and scrap_page get call in the main in the 
-following order.
+There are 16 functions. only : get_all_category, create_folder, get_books_url and scrap_page get call in the main.py in 
+the following order.
 """
 
 
@@ -86,7 +86,7 @@ def if_next_page(link):
 
 def get_next_button_url(link):
     """
-    This function get the link of the next page and all others pages after
+    This function get the link of the next page and return it
     """
     result = requests.get(link)
 
@@ -163,7 +163,7 @@ def get_books_url(category_link):
 def scrap_page(book_page_url):
     """
     This function scrap the targeted page ,sleep for 3 between 5s each time
-    and then write all in a CSV file
+    and then write all in a CSV file (i put sleep function in comment to go faster)
     """
 
     compteur = 0
@@ -410,8 +410,7 @@ def get_image_url(url):
 
 def get_img(url, title, category):
     """
-    This function download image with the title of the book in name in the folders of the programme
-    var i correspond to the position in the 2D list use in the scrap_target_page functions so names matches.
+    This function download image with the title of the book in name in the folders of the programme corresponding
     """
     name = category
     default_name = "%s" % title
